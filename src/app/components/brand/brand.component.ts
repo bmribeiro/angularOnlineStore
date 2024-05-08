@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { BrandService } from '../../services/brand.service';
+import {MatTableModule} from '@angular/material/table';
+import { Brand } from '../../models/Brand';
 
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
-  styleUrl: './brand.component.css'
+  styleUrl: './brand.component.css',
+  standalone: true,
+  imports: [MatTableModule]
 })
 export class BrandComponent implements OnInit{
 
-  brands: any[] = [];
+  displayedColumns: string[] = ['brandName', 'brandDescription'];
+  brands: Brand[] = [];
 
   constructor(private brandService: BrandService) { }
 
@@ -21,6 +26,4 @@ export class BrandComponent implements OnInit{
       this.brands = data;
     });
   }
-  
-
 }
