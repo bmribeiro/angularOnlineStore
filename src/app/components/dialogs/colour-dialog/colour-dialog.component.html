@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Cor</h2>
+
+<mat-dialog-content>
+
+    <form class="colourDialogform">
+
+        <mat-form-field class="colourDialogFullWidth">
+            <mat-label>Cor</mat-label>
+            <input matInput [(ngModel)]="data.colourName" name="colourName">
+        </mat-form-field>
+
+        <mat-form-field class="colourDialogFullWidth">
+            <mat-label>Código HEX</mat-label>
+            <input matInput [(ngModel)]="data.colourHex" name="colourHex">
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

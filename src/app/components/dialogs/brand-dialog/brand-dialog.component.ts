@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Brand } from '../../models/Brand';
+import { Brand } from '../../../models/Brand';
 
 @Component({
   selector: 'app-brand-dialog',

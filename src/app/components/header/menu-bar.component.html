@@ -1,0 +1,11 @@
+
+<h1 class="container">{{ title }}</h1>
+
+<hr>
+
+<button class="container" mat-button [matMenuTriggerFor]="menu">Menu</button>
+<mat-menu #menu="matMenu">
+    <button routerLink="/colours" mat-menu-item>Cor</button>
+    <button routerLink="/brands" mat-menu-item>Marcas</button>
+    <button routerLink="/sizeCategories" mat-menu-item>Tamanho Categorias</button>
+</mat-menu>

@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { BrandService } from '../../services/brand.service';
-import { Brand } from '../../models/Brand';
+import { BrandService } from '../../../services/brand.service';
+import { Brand } from '../../../models/Brand';
 import { MatDialog } from '@angular/material/dialog';
-import { BrandDialogComponent } from '../dialog/brand-dialog.component';
+import { BrandDialogComponent } from '../../dialogs/brand-dialog/brand-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
