@@ -1,0 +1,61 @@
+<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+
+<div class="mat-elevation-z8">
+
+    <h2>Produto</h2>
+
+    <table mat-table [dataSource]="productsSource" matSort (matSortChange)="announceSortChange($event)"
+        class="mat-elevation-z8">
+
+        <!-- Product Category -->
+        <ng-container matColumnDef="productCategory">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Categoria"> Categoria </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandName}} </td>
+        </ng-container>
+
+        <!-- Brand -->
+        <ng-container matColumnDef="brand">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Marca"> Marca </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+        </ng-container>
+
+        <!-- Product Image -->
+        <ng-container matColumnDef="productImage">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Imagem Produto"> Imagem Produto </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+        </ng-container>
+
+        <!-- Description -->
+        <ng-container matColumnDef="productDescription">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Descrição </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+        </ng-container>
+
+        <!-- Care Instructions -->
+        <ng-container matColumnDef="careInstructions">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Instrução de Cuidado"> Instruções Cuidado </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+        </ng-container>
+
+        <!-- About -->
+        <ng-container matColumnDef="about">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar por Sobre"> Sobre </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

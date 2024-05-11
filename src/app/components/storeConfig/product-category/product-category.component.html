@@ -1,0 +1,61 @@
+<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+
+<div class="mat-elevation-z8">
+
+    <h2>Marcas</h2>
+
+    <table mat-table [dataSource]="productCategoriesSource" matSort (matSortChange)="announceSortChange($event)"
+        class="mat-elevation-z8">
+
+        <!-- Name -->
+        <ng-container matColumnDef="categoryName">
+            <th class="categoryNameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo nome"> Nome </th>
+            <td mat-cell *matCellDef="let element"> {{element.categoryName}} </td>
+        </ng-container>
+
+        <!-- Image -->
+        <ng-container matColumnDef="categoryImage">
+            <th class="categoryImageCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Imagem </th>
+            <td mat-cell *matCellDef="let element"> {{element.categoryImage}} </td>
+        </ng-container>
+
+        <!-- Description -->
+        <ng-container matColumnDef="categoryDescription">
+            <th class="categoryDescriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Descrição </th>
+            <td mat-cell *matCellDef="let element"> {{element.categoryDescription}} </td>
+        </ng-container>
+
+        <!-- SizeCategory -->
+        <ng-container matColumnDef="sizeCategory">
+            <th class="sizeCategoryCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Tamanho Categoria </th>
+            <td mat-cell *matCellDef="let element">
+                <ng-container
+                    *ngIf="element.sizeCategory; else noSizeCategory">{{element.sizeCategory.sizeCategoryName}}</ng-container>
+                <ng-template #noSizeCategory>N/A</ng-template>
+            </td>
+        </ng-container>
+
+        <!-- Parent Product Category -->
+        <ng-container matColumnDef="parentProductCategory">
+            <th class="parentProductCategoryCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Categoria Produtos Pai </th>
+            <td mat-cell *matCellDef="let element"> <ng-container
+                    *ngIf="element.sizeCategory; else noSizeCategory">{{element.parentProductCategory.categoryName}}</ng-container>
+                <ng-template #noSizeCategory>N/A</ng-template>
+            </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

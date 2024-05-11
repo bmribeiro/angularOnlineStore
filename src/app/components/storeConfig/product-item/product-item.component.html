@@ -1,0 +1,53 @@
+<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+
+<div class="mat-elevation-z8">
+
+    <h2>Item de Produto</h2>
+
+    <table mat-table [dataSource]="productItemsSource" matSort (matSortChange)="announceSortChange($event)"
+        class="mat-elevation-z8">
+
+        <!-- Produto -->
+        <ng-container matColumnDef="brandName">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo Produto"> Produto </th>
+            <td mat-cell *matCellDef="let element"> {{element.product}} </td>
+        </ng-container>
+
+        <!-- Cor -->
+        <ng-container matColumnDef="brandDescription">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Cor"> Cor </th>
+            <td mat-cell *matCellDef="let element"> {{element.colour}} </td>
+        </ng-container>
+
+        <!-- Preço Original -->
+        <ng-container matColumnDef="brandDescription">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo Preço Original"> Preço Original </th>
+            <td mat-cell *matCellDef="let element"> {{element.originalPrice}} </td>
+        </ng-container>
+
+        <!-- Preço Venda -->
+        <ng-container matColumnDef="brandDescription">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo Preço de Venda"> Preço Venda </th>
+            <td mat-cell *matCellDef="let element"> {{element.salePrice}} </td>
+        </ng-container>
+
+        <!-- Código de Produto-->
+        <ng-container matColumnDef="brandDescription">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo Código de Produto"> Código Produto </th>
+            <td mat-cell *matCellDef="let element"> {{element.productCode}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

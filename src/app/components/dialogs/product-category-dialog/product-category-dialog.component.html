@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Caterogia de Produto</h2>
+
+<mat-dialog-content>
+
+    <form class="productCategoryDialogform">
+
+        <mat-form-field class="productCategoryDialogFullWidth">
+            <mat-label>Categoria</mat-label>
+            <input matInput [(ngModel)]="data.categoryName" name="categoryName">
+        </mat-form-field>
+
+        <mat-form-field class="productCategoryDialogFullWidth">
+            <mat-label>Imagem</mat-label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" #imageInput>
+            <img *ngIf="imageUrl" [src]="imageUrl" alt="Imagem Selecionada">
+        </mat-form-field>
+
+        <mat-form-field class="productCategoryDialogFullWidth">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput [(ngModel)]="data.categoryDescription" name="categoryDescription"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="productCategoryDialogFullWidth">
+            <mat-label>Tamanho Categoria</mat-label>
+            <input matInput [(ngModel)]="data.sizeCategory" name="sizeCategory">
+        </mat-form-field>
+
+        <mat-form-field class="productCategoryDialogFullWidth">
+            <mat-label>Categoria Pai</mat-label>
+            <input matInput [(ngModel)]="data.parentProductCategory" name="parentProductCategory">
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>
