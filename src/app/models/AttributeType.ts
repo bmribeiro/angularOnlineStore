@@ -1,5 +1,4 @@
 export interface AttributeType {
-    brandId: number | null;
-    brandName: string;
-    brandDescription: string;
+    attributeTypeId: number | null;
+    attributeName: string;
 }

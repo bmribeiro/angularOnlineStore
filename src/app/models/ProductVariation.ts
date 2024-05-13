@@ -7,3 +7,14 @@ export interface ProductVariation {
     size: SizeOption;
     qtyInStock: number;
 }
+
+export class ProductVariationImpl implements ProductVariation {
+    constructor(
+      public productVariationId: number | null,
+      public productItem: ProductItem,
+      public size: SizeOption,
+      public qtyInStock: number
+    ) { }
+  }
+
+  

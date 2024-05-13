@@ -17,6 +17,7 @@ export class ProductCategoryService {
   getProductCategories(): Observable<any[]> {
 
     const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
     });
 
     return this.http.get<any[]>(this.apiUrl, { headers }).pipe(
@@ -36,14 +37,18 @@ export class ProductCategoryService {
   }
 
   // POST
-  addProductCategory(productCategory: ProductCategory): Observable<any> {
+  addProductCategory(productCategory: ProductCategory, file: File): Observable<any> {
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     });
 
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('productCategory', JSON.stringify(productCategory));
+
     // Solicitação HTTP POST
-    return this.http.post<any>(this.apiUrl, JSON.stringify(productCategory), { headers: headers });
+    return this.http.post<any>(this.apiUrl, formData, {});
   }
 
 

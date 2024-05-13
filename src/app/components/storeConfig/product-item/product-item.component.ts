@@ -1,15 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
 import { Product } from '../../../models/Product';
 import { Colour } from '../../../models/Colour';
-import { ProductItem } from '../../../models/ProductItem';
+import { ProductItem, ProductItemImpl } from '../../../models/ProductItem';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
-import { BrandDialogComponent } from '../../dialogs/brand-dialog/brand-dialog.component';
 import { ProductItemService } from '../../../services/product-item.service';
+import { ProductService } from '../../../services/product.service';
+import { ColourService } from '../../../services/colour.service';
+import { ProductItemDialogComponent } from '../../dialogs/product-item-dialog/product-item-dialog.component';
 
 @Component({
   selector: 'app-product-item',
@@ -25,17 +27,16 @@ export class ProductItemComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   productItemsSource!: MatTableDataSource<ProductItem, MatPaginator>;
 
-  // Dialog Fields
-  product!: Product;
-  colour!: Colour;
-  originalPrice!: number;
-  salePrice!: number;
-  productCode!: string;
+  // Dialog Combo Field
+  products!: Product[];
+  colours!: Colour[];
 
   constructor(
     private productItemService: ProductItemService,
     public brandDialog: MatDialog,
-    private _liveAnnouncer: LiveAnnouncer) { }
+    private _liveAnnouncer: LiveAnnouncer,
+    private productService: ProductService,
+    private colourService: ColourService) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadBrands();
@@ -59,28 +60,56 @@ export class ProductItemComponent {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(): Promise<void> {
 
-    const productItemData: ProductItem = {
-      productItemId: null,
-      product: this.product,
-      colour: this.colour,
-      originalPrice: this.originalPrice,
-      salePrice: this.salePrice,
-      productCode: this.productCode
-    };
+    // ProductCategories & Brands
+    try {
+      const dataProducts = await this.productService.getProducts().pipe(take(1)).toPromise();
+      this.products = dataProducts as Product[];
 
-    const brandDialogRef = this.brandDialog.open(BrandDialogComponent, {
-      data: productItemData,
+      const dataColours = await this.colourService.getColours().pipe(take(1)).toPromise();
+      this.colours = dataColours as Colour[];
+
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+    }
+
+    const productItemDialogRef = this.brandDialog.open(ProductItemDialogComponent, {
+      data: {
+        products: this.products,
+        colours: this.colours
+      }
     });
 
-    brandDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.productItemService.addProductItem(productItemData).subscribe(response => {
-          this.productItems.push(productItemData);
+    productItemDialogRef.afterClosed().subscribe(result => {
+      if (result
+        && result.selectedProduct
+        && result.selectedColour
+        && result.originalPrice
+        && result.salePrice
+        && result.productCode) {
+
+        const selectedProduct = result.selectedProduct;
+        const selectedColour = result.selectedColour
+
+        // Product Item
+        const productItem = new ProductItemImpl(
+          null,
+          selectedProduct,
+          selectedColour,
+          result.originalPrice,
+          result.salePrice,
+          result.productCode
+        );
+
+        // File
+        const file = result.file;
+
+        this.productItemService.addProductItem(productItem, file).subscribe(response => {
+          this.productItems.push(productItem);
           console.log('Marca adicionada com sucesso:', response);
         }, error => {
-          console.error('Erro ao adicionar marca:', error);
+          console.error('Erro ao adicionar Item Produto:', error);
         });
       }
     });

@@ -6,28 +6,41 @@
 
         <mat-form-field class="productCategoryDialogFullWidth">
             <mat-label>Categoria</mat-label>
-            <input matInput [(ngModel)]="data.categoryName" name="categoryName">
+            <input matInput [(ngModel)]="categoryName" name="categoryName">
         </mat-form-field>
 
-        <mat-form-field class="productCategoryDialogFullWidth">
-            <mat-label>Imagem</mat-label>
-            <input type="file" (change)="onFileSelected($event)" accept="image/*" #imageInput>
-            <img *ngIf="imageUrl" [src]="imageUrl" alt="Imagem Selecionada">
-        </mat-form-field>
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload">
+
+            {{fileName || "No file uploaded yet."}}
+
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
 
         <mat-form-field class="productCategoryDialogFullWidth">
             <mat-label>Descrição</mat-label>
-            <textarea matInput [(ngModel)]="data.categoryDescription" name="categoryDescription"></textarea>
+            <textarea matInput [(ngModel)]="categoryDescription" name="categoryDescription"></textarea>
         </mat-form-field>
 
-        <mat-form-field class="productCategoryDialogFullWidth">
-            <mat-label>Tamanho Categoria</mat-label>
-            <input matInput [(ngModel)]="data.sizeCategory" name="sizeCategory">
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Categoria Tamanho</mat-label>
+            <mat-select [(ngModel)]="selectedSize" name="selectedSize">
+                <mat-option *ngFor="let size of sizes" [value]="size">
+                    {{ size.sizeCategoryName }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="productCategoryDialogFullWidth">
+        <mat-form-field class="attributeOptionDialogFullWidth">
             <mat-label>Categoria Pai</mat-label>
-            <input matInput [(ngModel)]="data.parentProductCategory" name="parentProductCategory">
+            <mat-select [(ngModel)]="selectedParentCategory" name="selectedParentCategory">
+                <mat-option *ngFor="let parentCategory of parentCategories" [value]="parentCategory">
+                    {{ parentCategory.categoryName }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
 
     </form>
@@ -36,5 +49,5 @@
 
 <mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="confirm()">Confirmar</button>
 </mat-dialog-actions>

@@ -1,1 +1,61 @@
-<p>product-item-dialog works!</p>
+<h2 mat-dialog-title>Item</h2>
+
+<mat-dialog-content>
+
+    <form class="attributeOptionDialogform">
+
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Produto</mat-label>
+            <mat-select [(ngModel)]="selectedProduct" name="product">
+                <mat-option *ngFor="let product of products" [value]="product">
+                    {{ product.productName }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Cor</mat-label>
+            <mat-select [(ngModel)]="selectedColour" name="colour">
+                <mat-option *ngFor="let colour of colours" [value]="colour">
+                    {{ colour.colourName }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload">
+
+            {{fileName || "No file uploaded yet."}}
+
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
+
+        <!-- Preço -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Preço</mat-label>
+            <input matInput [(ngModel)]="originalPrice" name="originalPrice">
+        </mat-form-field>
+
+        <!-- Promo -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Promo</mat-label>
+            <input matInput [(ngModel)]="salePrice" name="salePrice">
+        </mat-form-field>
+
+        <!-- Código -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Código</mat-label>
+            <input matInput [(ngModel)]="productCode" name="productCode">
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="confirm()">Confirmar</button>
+</mat-dialog-actions>

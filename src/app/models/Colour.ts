@@ -3,3 +3,11 @@ export interface Colour {
   colourName: string;
   colourHex: string;
 }
+
+export class ColourImpl implements Colour {
+  constructor(
+    public colourId: number | null,
+    public colourName: string,
+    public colourHex: string
+  ) { }
+}

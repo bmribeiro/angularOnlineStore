@@ -8,8 +8,8 @@ import { ProductComponent } from './components/storeConfig/product/product.compo
 import { ProductItemComponent } from './components/storeConfig/product-item/product-item.component';
 import { ProductImageComponent } from './components/storeConfig/product-image/product-image.component';
 import { ProductVariationComponent } from './components/storeConfig/product-variation/product-variation.component';
-import { AttributeOptionComponent } from './attribute-option/attribute-option.component';
-import { AttributeTypeComponent } from './attribute-type/attribute-type.component';
+import { AttributeOptionComponent } from './components/storeConfig/attribute-option/attribute-option.component';
+import { AttributeTypeComponent } from './components/storeConfig/attribute-type/attribute-type.component';
 import { SizeOptionComponent } from './components/storeConfig/size-option/size-option.component';
 import { ProductAttributeComponent } from './components/storeConfig/product-attribute/product-attribute.component';
 

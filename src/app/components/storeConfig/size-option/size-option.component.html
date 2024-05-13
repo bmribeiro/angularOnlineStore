@@ -1,1 +1,40 @@
-<p>size-option works!</p>
+<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+
+<div class="mat-elevation-z8">
+
+    <h2>Opções Tamanho</h2>
+
+    <table mat-table [dataSource]="sizeOptionsSource" matSort (matSortChange)="announceSortChange($event)"
+        class="mat-elevation-z8">
+
+        <!-- Size -->
+        <ng-container matColumnDef="sizeName">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo Tamanho"> Tamanho </th>
+            <td mat-cell *matCellDef="let element"> {{element.sizeName}} </td>
+        </ng-container>
+
+        <!-- Order -->
+        <ng-container matColumnDef="sortOrder">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Ordem"> Ordem </th>
+            <td mat-cell *matCellDef="let element"> {{element.sortOrder}} </td>
+        </ng-container>
+
+        <!-- SizeCategory -->
+        <ng-container matColumnDef="sizeCategory">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela Categoria"> Categoria </th>
+            <td mat-cell *matCellDef="let element"> {{element.sizeCategory.sizeCategoryName}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

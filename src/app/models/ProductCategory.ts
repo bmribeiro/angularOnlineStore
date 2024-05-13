@@ -8,3 +8,15 @@ export interface ProductCategory {
     sizeCategory: SizeCategory
     parentProductCategory: ProductCategory
 }
+
+export class ProductCategoryImpl implements ProductCategory {
+    constructor(
+        public productCategoryId: number | null,
+        public categoryName: string,
+        public categoryImage: File,
+        public categoryDescription: string,
+        public sizeCategory: SizeCategory,
+        public parentProductCategory: ProductCategory
+    ) { }
+}
+

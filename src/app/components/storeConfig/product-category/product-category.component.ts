@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ProductCategory } from '../../../models/ProductCategory';
+import { ProductCategory, ProductCategoryImpl } from '../../../models/ProductCategory';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,8 +7,9 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductCategoryService } from '../../../services/product-category.service';
 import { take } from 'rxjs';
-import { SizeCategory } from '../../../models/SizeCategory';
 import { ProductCategoryDialogComponent } from '../../dialogs/product-category-dialog/product-category-dialog.component';
+import { SizeCategory } from '../../../models/SizeCategory';
+import { SizeCategoryService } from '../../../services/size-category.service';
 
 @Component({
   selector: 'app-product-category',
@@ -24,17 +25,15 @@ export class ProductCategoryComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   productCategoriesSource!: MatTableDataSource<ProductCategory, MatPaginator>;
 
-  // Dialog Fields
-  categoryName!: string;
-  categoryImage!: File;
-  categoryDescription!: string;
-  sizeCategory!: SizeCategory;
-  parentProductCategory!: ProductCategory;
+  // Dialog Combo Field
+  sizeCategories!: SizeCategory[];
+  parentCategories!: ProductCategory[];
 
   constructor(
     private productCategoryService: ProductCategoryService,
     public productCategoryDialog: MatDialog,
-    private _liveAnnouncer: LiveAnnouncer) { }
+    private _liveAnnouncer: LiveAnnouncer,
+    public sizeCategoryService: SizeCategoryService) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadProductCategory();
@@ -59,28 +58,57 @@ export class ProductCategoryComponent {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(): Promise<void> {
 
-    const productCategoryData: ProductCategory = {
-      productCategoryId: null,
-      categoryName: this.categoryName,
-      categoryImage: this.categoryImage,
-      categoryDescription: this.categoryDescription,
-      sizeCategory: this.sizeCategory,
-      parentProductCategory: this.parentProductCategory
-    };
+    // SizeCategory & ParentProductCategory
+    try {
+      const dataSizeCategories = await this.sizeCategoryService.getSizeCategories().pipe(take(1)).toPromise();
+      this.sizeCategories = dataSizeCategories as SizeCategory[];
+
+      const dataParentCategories = await this.productCategoryService.getProductCategories().pipe(take(1)).toPromise();
+      this.parentCategories = dataParentCategories as ProductCategory[];
+
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+    }
 
     const productCategoryDialogRef = this.productCategoryDialog.open(ProductCategoryDialogComponent, {
-      data: productCategoryData,
+      data: {
+        dataSizeCategories: this.sizeCategories,
+        dataParentCategories: this.parentCategories
+      }
     });
 
     productCategoryDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.productCategoryService.addProductCategory(productCategoryData).subscribe(response => {
-          this.productCategories.push(productCategoryData);
+      if (result
+        && result.categoryName
+        && result.categoryImage
+        && result.categoryDescription
+        && result.selectedSize
+        && result.parentCategories) {
+
+        const selectedSize = result.selectedSize;
+        const selectedParentCategory = result.selectedParentCategory;
+
+        // Category
+        const category = new ProductCategoryImpl(
+          null,
+          result.categoryName,
+          result.categoryImage,
+          result.categoryDescription,
+          selectedSize,
+          selectedParentCategory
+        );
+
+        // File
+        const file = result.file;
+
+        this.productCategoryService.addProductCategory(category, file).subscribe(response => {
+
+          this.productCategories.push(category);
           console.log('Marca adicionada com sucesso:', response);
         }, error => {
-          console.error('Erro ao adicionar marca:', error);
+          console.error('Erro ao adicionar Categoria:', error);
         });
       }
     });

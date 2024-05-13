@@ -1,1 +1,68 @@
-<p>product-dialog works!</p>
+<h2 mat-dialog-title>Produto</h2>
+
+<mat-dialog-content>
+
+    <form class="attributeOptionDialogform">
+
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Categoria</mat-label>
+            <mat-select [(ngModel)]="selectedProductCategory" name="productCategory">
+                <mat-option *ngFor="let productCategory of productCategories" [value]="productCategory">
+                    {{ productCategory.categoryName }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Marca</mat-label>
+            <mat-select [(ngModel)]="selectedBrand" name="brand">
+                <mat-option *ngFor="let brand of brands" [value]="brand">
+                    {{ brand.brandName }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Nome -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Nome</mat-label>
+            <input matInput [(ngModel)]="productName" name="productName">
+        </mat-form-field>
+
+        <!-- Descrição -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Descrição</mat-label>
+            <input matInput [(ngModel)]="productDescription" name="productDescription">
+        </mat-form-field>
+
+        <!-- Imagem -->
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload">
+
+            {{fileName || "No file uploaded yet."}}
+
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
+
+        <!-- Instruções -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Instruções</mat-label>
+            <input matInput [(ngModel)]="careInstructions" name="careInstructions">
+        </mat-form-field>
+
+        <!-- Sobre -->
+        <mat-form-field class="attributeOptionDialogFullWidth">
+            <mat-label>Sobre</mat-label>
+            <input matInput [(ngModel)]="about" name="about">
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="confirm()">Confirmar</button>
+</mat-dialog-actions>

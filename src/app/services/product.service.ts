@@ -23,14 +23,18 @@ export class ProductService {
   }
 
   // POST
-  addProduct(product: Product): Observable<any> {
+  addProduct(product: Product, file: File): Observable<any> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('product', JSON.stringify(product));
+
     // Solicitação HTTP POST
-    return this.http.post<any>(this.apiUrl, JSON.stringify(product), { headers: headers });
+    return this.http.post<any>(this.apiUrl, JSON.stringify(product), { });
   }
 
 }

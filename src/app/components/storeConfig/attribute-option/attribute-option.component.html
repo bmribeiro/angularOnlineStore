@@ -1,0 +1,32 @@
+<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+
+<div class="mat-elevation-z8">
+
+    <h2>Marcas</h2>
+
+    <table mat-table [dataSource]="attributeOptionsSource" matSort (matSortChange)="announceSortChange($event)"
+        class="mat-elevation-z8">
+
+        <!-- Atributo -->
+        <ng-container matColumnDef="attributeType">
+            <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pelo nome"> Nome </th>
+            <td mat-cell *matCellDef="let element"> {{element.attributeType.attributeName}} </td>
+        </ng-container>
+
+        <!-- Opção -->
+        <ng-container matColumnDef="attributeOptionName">
+            <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Ordenar pela descrição"> Descrição </th>
+            <td mat-cell *matCellDef="let element"> {{element.attributeOptionName}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

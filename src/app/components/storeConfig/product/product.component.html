@@ -11,44 +11,43 @@
         <ng-container matColumnDef="productCategory">
             <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header
                 sortActionDescription="Ordenar pela Categoria"> Categoria </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandName}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.productCategory.categoryName}} </td>
         </ng-container>
 
-        <!-- Brand -->
+        <!-- Marca -->
         <ng-container matColumnDef="brand">
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
                 sortActionDescription="Ordenar pela Marca"> Marca </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.brand.brandName}} </td>
         </ng-container>
 
-        <!-- Product Image -->
-        <ng-container matColumnDef="productImage">
+        <!-- Nome -->
+        <ng-container matColumnDef="productName">
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
-                sortActionDescription="Ordenar pela Imagem Produto"> Imagem Produto </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+                sortActionDescription="Ordenar pelo Nome"> Nome </th>
+            <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
         </ng-container>
 
-        <!-- Description -->
+        <!-- Descrição -->
         <ng-container matColumnDef="productDescription">
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
-                sortActionDescription="Ordenar pela descrição"> Descrição </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+                sortActionDescription="Ordenar pela Descrição"> Descrição </th>
+            <td mat-cell *matCellDef="let element"> {{element.productDescription}} </td>
         </ng-container>
 
-        <!-- Care Instructions -->
+        <!-- Instruções -->
         <ng-container matColumnDef="careInstructions">
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
-                sortActionDescription="Ordenar pela Instrução de Cuidado"> Instruções Cuidado </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+                sortActionDescription="Ordenar por Instruções"> Instruções </th>
+            <td mat-cell *matCellDef="let element"> {{element.careInstructions}} </td>
         </ng-container>
 
-        <!-- About -->
+        <!-- Sobre -->
         <ng-container matColumnDef="about">
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
                 sortActionDescription="Ordenar por Sobre"> Sobre </th>
-            <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.about}} </td>
         </ng-container>
-
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

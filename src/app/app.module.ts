@@ -30,8 +30,15 @@ import { ProductImageComponent } from './components/storeConfig/product-image/pr
 import { ProductVariationComponent } from './components/storeConfig/product-variation/product-variation.component';
 import { SizeOptionComponent } from './components/storeConfig/size-option/size-option.component';
 import { ProductAttributeComponent } from './components/storeConfig/product-attribute/product-attribute.component';
-import { AttributeOptionComponent } from './attribute-option/attribute-option.component';
-import { AttributeTypeComponent } from './attribute-type/attribute-type.component';
+import { AttributeOptionComponent } from './components/storeConfig/attribute-option/attribute-option.component';
+import { AttributeTypeComponent } from './components/storeConfig/attribute-type/attribute-type.component';
+import { AttributeTypeDialogComponent } from './components/dialogs/attribute-type-dialog/attribute-type-dialog.component';
+import { AttributeOptionDialogComponent } from './components/dialogs/attribute-option-dialog/attribute-option-dialog.component';
+import { ProductAttributeDialogComponent } from './components/dialogs/product-attribute-dialog/product-attribute-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
+import { ProductDialogComponent } from './components/dialogs/product-dialog/product-dialog.component';
+import { ProductItemDialogComponent } from './components/dialogs/product-item-dialog/product-item-dialog.component';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -46,13 +53,18 @@ import { AttributeTypeComponent } from './attribute-type/attribute-type.componen
         ProductCategoryComponent,
         ProductCategoryDialogComponent,
         ProductComponent,
+        ProductDialogComponent,
         ProductItemComponent,
+        ProductItemDialogComponent,
         ProductImageComponent,
         ProductVariationComponent,
         SizeOptionComponent,
         ProductAttributeComponent,
+        ProductAttributeDialogComponent,
         AttributeOptionComponent,
-        AttributeTypeComponent
+        AttributeOptionDialogComponent,
+        AttributeTypeComponent,
+        AttributeTypeDialogComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true },
@@ -76,7 +88,9 @@ import { AttributeTypeComponent } from './attribute-type/attribute-type.componen
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSelectModule,
+        MatIconModule
     ],
 })
 export class AppModule { }
