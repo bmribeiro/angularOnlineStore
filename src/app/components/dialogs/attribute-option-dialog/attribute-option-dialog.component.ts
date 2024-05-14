@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AttributeType } from '../../../models/AttributeType';
+import { AttributeOption } from '../../../models/AttributeOption';
 
 @Component({
   selector: 'app-attribute-option-dialog',
@@ -11,15 +12,28 @@ export class AttributeOptionDialogComponent {
 
   // Attribute Type
   attributeTypes: AttributeType[];
-  selectedAttributeType: AttributeType | undefined;
 
-  // Dialog Field
-  attributeOptionName!: string;
+  // AttributeOption
+  element: AttributeOption = {
+    attributeOptionId: null,
+    attributeType: null,
+    attributeOptionName: ''
+  };
 
   constructor(public attributeOptionDialogRef: MatDialogRef<AttributeOptionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.attributeTypes = data.attributeTypes;
+    if (data.attributeOption != null) {
+      this.element = data.attributeOption;
+    }
+  }
+
+  compareFunction(el1: AttributeType, el2: AttributeType): boolean {
+    if (el2 != null) {
+      return el1 && el2 ? el1.attributeTypeId === el2.attributeTypeId : el1 === el2;
+    } else
+      return false;
   }
 
   onNoClick(): void {
@@ -28,8 +42,7 @@ export class AttributeOptionDialogComponent {
 
   confirm(): void {
     this.attributeOptionDialogRef.close({
-      selectedAttributeType: this.selectedAttributeType,
-      attributeOptionName: this.attributeOptionName
+      element: this.element
     });
   }
 }

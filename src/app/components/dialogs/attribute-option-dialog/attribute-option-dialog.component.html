@@ -6,8 +6,8 @@
 
         <mat-form-field class="attributeOptionDialogFullWidth">
             <mat-label>Tipo Atributo</mat-label>
-            <mat-select [(ngModel)]="selectedAttributeType" name="attributeType">
-                <mat-option *ngFor="let attributeType of attributeTypes" [value]="attributeType">
+            <mat-select [(ngModel)]="element.attributeType" name="attributeType"  [compareWith]="compareFunction">
+                <mat-option *ngFor="let attributeType of attributeTypes" [value]="attributeType" >
                     {{ attributeType.attributeName }}
                 </mat-option>
             </mat-select>
@@ -15,7 +15,7 @@
 
         <mat-form-field class="attributeOptionDialogFullWidth">
             <mat-label>Atributo</mat-label>
-            <input matInput [(ngModel)]="attributeOptionName" name="attributeOptionName">
+            <input matInput [(ngModel)]="element.attributeOptionName" name="attributeOptionName">
         </mat-form-field>
 
     </form>

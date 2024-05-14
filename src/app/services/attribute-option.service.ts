@@ -19,7 +19,7 @@ export class AttributeOptionService {
     });
 
     // Solicitação HTTP GET
-    return this.http.get<any[]>(this.apiUrl, { headers: headers });
+    return this.http.get<AttributeOption[]>(this.apiUrl, { headers: headers });
   }
 
   // POST
@@ -30,6 +30,27 @@ export class AttributeOptionService {
     });
 
     // Solicitação HTTP POST
-    return this.http.post<any>(this.apiUrl, JSON.stringify(attributeOption), { headers: headers });
+    return this.http.post<AttributeOption>(this.apiUrl, JSON.stringify(attributeOption), { headers: headers });
   }
+
+  // GET BY ID
+  editElement(attributeOptionId: number) {
+    return this.http.get<AttributeOption>(`${this.apiUrl}/${attributeOptionId}`);
+  }
+
+  // UPDATE
+  updateAttributeOption(attributeOption: AttributeOption) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<AttributeOption>(this.apiUrl, JSON.stringify(attributeOption), { headers });
+  }
+
+  // DELETE
+  deleteAttributeOption(attributeOptionId: number){
+    return this.http.delete(`${this.apiUrl}/${attributeOptionId}`);
+  }
+
 }

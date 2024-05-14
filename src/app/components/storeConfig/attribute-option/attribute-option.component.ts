@@ -1,7 +1,7 @@
 import { Attribute, Component, ViewChild } from '@angular/core';
 import { AttributeType } from '../../../models/AttributeType';
 import { AttributeOptionService } from '../../../services/attribute-option.service';
-import { AttributeOption } from '../../../models/AttributeOption';
+import { AttributeOption, AttributeOptionImpl } from '../../../models/AttributeOption';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,7 +18,7 @@ import { AttributeTypeService } from '../../../services/attribute-type.service';
 })
 export class AttributeOptionComponent {
 
-  displayedColumns: string[] = ['attributeType', 'attributeOptionName'];
+  displayedColumns: string[] = ['attributeType', 'attributeOptionName', 'edit', 'delete'];
   attributeOptions: AttributeOption[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -56,7 +56,7 @@ export class AttributeOptionComponent {
   }
 
   // Dialog
-  async openDialog(): Promise<void> {
+  async openDialog(attributeOption: AttributeOption | null): Promise<void> {
 
     // AttributeTypes
     try {
@@ -66,33 +66,60 @@ export class AttributeOptionComponent {
       console.error('Erro ao carregar atributos:', error);
     }
 
-    // AttributeOption
-    const attributeOptionData: AttributeOption = {
-      attributeOptionId: null,
-      attributeType: null,
-      attributeOptionName: null
-    };
-
     const attributeOptionDialogRef = this.attributeOptionDialog.open(AttributeOptionDialogComponent, {
       data: {
-        attributeTypes: this.attributeTypes
+        attributeTypes: this.attributeTypes,
+        attributeOption: attributeOption ? attributeOption : null
       }
     });
 
     attributeOptionDialogRef.afterClosed().subscribe(result => {
-      if (result && result.selectedAttributeType && result.attributeOptionName) {
+      if (result && result.element) {
 
-        attributeOptionData.attributeType = result.selectedAttributeType;
-        attributeOptionData.attributeOptionName = result.attributeOptionName
+        // New AttributeOption
+        if (result.element.attributeOptionId == null) {
+          this.attributeOptionService.addAttributeOption(result.element).subscribe(response => {
+            this.attributeOptions.push(result.element);
+            console.log('Opção Atributo adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Opção Atributo:', error);
+          });
 
-        this.attributeOptionService.addAttributeOption(attributeOptionData).subscribe(response => {
-          this.attributeOptions.push(attributeOptionData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar Opção Atributo:', error);
-        });
+          // Edit AttributeOption
+        } else {
+          this.attributeOptionService.updateAttributeOption(result.element).subscribe(response => {
+            this.attributeOptions.push(result.element);
+            console.log('Opção Atributo atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Opção Atributo:', error);
+          });
+        }
       }
     });
+  }
+
+  editElement(element: AttributeOption) {
+    if (element.attributeOptionId !== null) {
+      this.attributeOptionService.editElement(element.attributeOptionId).subscribe(response => {
+
+        const attributeOption: AttributeOption = new AttributeOptionImpl(
+          response.attributeOptionId,
+          response.attributeType,
+          response.attributeOptionName
+        );
+        this.openDialog(attributeOption);
+      });
+    } else {
+      console.error('O atributo optionId é nulo.');
+    }
+  }
+
+  deleteElement(element: any) {
+    if (element.attributeOptionId !== null) {
+      this.attributeOptionService.deleteAttributeOption(element.attributeOptionId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

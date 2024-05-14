@@ -6,3 +6,12 @@ export interface SizeOption {
     sortOrder: number;
     sizeCategory: SizeCategory
 }
+
+export class SizeOptionImpl implements SizeOption {
+    constructor(
+        public sizeOptionId: number | null,
+        public sizeName: string,
+        public sortOrder: number,
+        public sizeCategory: SizeCategory
+    ) { }
+}
