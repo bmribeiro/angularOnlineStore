@@ -8,7 +8,7 @@ import { CorsInterceptor } from './interceptors/cors.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BrandDialogComponent } from './components/dialogs/brand-dialog/brand-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
@@ -88,6 +88,7 @@ import { CartShippingComponent } from './components/storeCart/cart-shipping/cart
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
+        ReactiveFormsModule,
         MatInputModule,
         MatFormFieldModule,
         MatButtonModule,

@@ -2,20 +2,30 @@
 
 <mat-dialog-content>
 
-    <form class="attributeOptionDialogform">
+    <form [formGroup]="formGroup" class="attributeOptionDialogform">
 
         <mat-form-field class="attributeOptionDialogFullWidth">
             <mat-label>Tipo Atributo</mat-label>
-            <mat-select [(ngModel)]="element.attributeType" name="attributeType"  [compareWith]="compareFunction">
-                <mat-option *ngFor="let attributeType of attributeTypes" [value]="attributeType" >
+            <mat-select formControlName="attributeType" name="attributeType" [compareWith]="compareFunction">
+                <mat-option *ngFor="let attributeType of attributeTypes" [value]="attributeType">
                     {{ attributeType.attributeName }}
                 </mat-option>
             </mat-select>
+
+            <mat-error *ngIf="formGroup.get('attributeType')?.touched && formGroup.get('attributeType')?.invalid">
+                Tipo de atributo é obrigatório.
+            </mat-error>
         </mat-form-field>
 
+
         <mat-form-field class="attributeOptionDialogFullWidth">
-            <mat-label>Atributo</mat-label>
-            <input matInput [(ngModel)]="element.attributeOptionName" name="attributeOptionName">
+            <mat-label>Nome</mat-label>
+            <input matInput matInput formControlName="attributeOptionName" name="attributeOptionName">
+
+            <mat-error *ngIf="formGroup.get('attributeOptionName')?.touched && formGroup.get('attributeOptionName')?.invalid">
+                Nome é obrigatório.
+            </mat-error>
+
         </mat-form-field>
 
     </form>
@@ -24,5 +34,5 @@
 
 <mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button (click)="confirm()">Confirmar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
 </mat-dialog-actions>

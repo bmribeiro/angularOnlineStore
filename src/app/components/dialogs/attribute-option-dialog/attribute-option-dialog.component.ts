@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AttributeType } from '../../../models/AttributeType';
 import { AttributeOption } from '../../../models/AttributeOption';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-attribute-option-dialog',
@@ -10,22 +11,41 @@ import { AttributeOption } from '../../../models/AttributeOption';
 })
 export class AttributeOptionDialogComponent {
 
-  // Attribute Type
+  // FormGroup
+  formGroup!: FormGroup;
+
+  // AttributeTypes
   attributeTypes: AttributeType[];
 
   // AttributeOption
-  element: AttributeOption = {
+  attributeOptionEl: AttributeOption = {
     attributeOptionId: null,
     attributeType: null,
     attributeOptionName: ''
   };
 
   constructor(public attributeOptionDialogRef: MatDialogRef<AttributeOptionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+
   ) {
     this.attributeTypes = data.attributeTypes;
+
     if (data.attributeOption != null) {
-      this.element = data.attributeOption;
+
+      // Edição AttributeOption
+      this.formGroup = new FormGroup({
+        attributeOptionId: new FormControl(data.attributeOption.attributeOptionId),
+        attributeType: new FormControl(data.attributeOption.attributeType, Validators.required),
+        attributeOptionName: new FormControl(data.attributeOption.attributeOptionName, Validators.required)
+      });
+
+      // Novo AttributeOption
+    } else {
+      this.formGroup = new FormGroup({
+        attributeOptionId: new FormControl(null),
+        attributeType: new FormControl(null, Validators.required),
+        attributeOptionName: new FormControl('', Validators.required)
+      });
     }
   }
 
@@ -41,8 +61,21 @@ export class AttributeOptionDialogComponent {
   }
 
   confirm(): void {
-    this.attributeOptionDialogRef.close({
-      element: this.element
-    });
+    if (this.formGroup.valid) {
+      const attributeOptionIdControl = this.formGroup.get('attributeOptionId');
+      const attributeTypeControl = this.formGroup.get('attributeType');
+      const attributeOptionNameControl = this.formGroup.get('attributeOptionName');
+
+      if (attributeTypeControl && attributeOptionNameControl && attributeTypeControl.value && attributeOptionNameControl.value) {
+        this.attributeOptionEl = {
+          attributeOptionId: attributeOptionIdControl ? attributeOptionIdControl.value : null,
+          attributeType: attributeTypeControl.value,
+          attributeOptionName: attributeOptionNameControl.value
+        };
+        this.attributeOptionDialogRef.close({
+          element: this.attributeOptionEl
+        });
+      }
+    }
   }
 }

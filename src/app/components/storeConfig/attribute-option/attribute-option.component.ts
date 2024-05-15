@@ -1,4 +1,4 @@
-import { Attribute, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AttributeType } from '../../../models/AttributeType';
 import { AttributeOptionService } from '../../../services/attribute-option.service';
 import { AttributeOption, AttributeOptionImpl } from '../../../models/AttributeOption';
