@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AttributeOption } from '../models/AttributeOption';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import * as fileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -49,8 +50,23 @@ export class AttributeOptionService {
   }
 
   // DELETE
-  deleteAttributeOption(attributeOptionId: number){
+  deleteAttributeOption(attributeOptionId: number) {
     return this.http.delete(`${this.apiUrl}/${attributeOptionId}`);
   }
+
+  downloadExcel(): void {
+    this.http.get(`${this.apiUrl}/excel`, { responseType: 'blob' })
+      .subscribe((data: Blob) => {
+        fileSaver.saveAs(data, 'excel.xlsx');
+      });
+  }
+
+  downloadPdf(): void {
+    this.http.get(`${this.apiUrl}/pdf`, { responseType: 'blob' })
+      .subscribe((data: Blob) => {
+        fileSaver.saveAs(data, 'pdf.pdf');
+      });
+  }
+
 
 }

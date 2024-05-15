@@ -18,6 +18,7 @@ import { AttributeTypeService } from '../../../services/attribute-type.service';
 })
 export class AttributeOptionComponent {
 
+
   displayedColumns: string[] = ['attributeType', 'attributeOptionName', 'edit', 'delete'];
   attributeOptions: AttributeOption[] = [];
 
@@ -131,5 +132,14 @@ export class AttributeOptionComponent {
     }
   }
 
+  // EXCEL DATA
+  downloadExcel() {
+    this.attributeOptionService.downloadExcel();
+  }
+
+  // PDF DATA
+  downloadPDF() {
+    this.attributeOptionService.downloadPdf();
+  }
 
 }

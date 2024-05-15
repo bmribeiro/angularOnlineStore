@@ -1,8 +1,9 @@
 <button class="openDialog" mat-raised-button (click)="openDialog(null)">Adicionar</button>
 
+
 <div class="mat-elevation-z8">
 
-    <h2>Marcas</h2>
+    <h2>Opções Atributo</h2>
 
     <table mat-table [dataSource]="attributeOptionsSource" matSort (matSortChange)="announceSortChange($event)"
         class="mat-elevation-z8">
@@ -41,7 +42,6 @@
             </td>
         </ng-container>
 
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
@@ -51,3 +51,14 @@
     </mat-paginator>
 
 </div>
+
+<!-- Botões de Download -->
+<div style="text-align: right; margin-top: 10px;">
+    <button mat-raised-button color="primary" (click)="downloadExcel()">
+        <mat-icon>file_download</mat-icon> Excel
+    </button>
+    <button mat-raised-button color="primary" (click)="downloadPDF()">
+        <mat-icon>picture_as_pdf</mat-icon> PDF
+    </button>
+</div>
+
