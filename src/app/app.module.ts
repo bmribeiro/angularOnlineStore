@@ -39,6 +39,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { ProductDialogComponent } from './components/dialogs/product-dialog/product-dialog.component';
 import { ProductItemDialogComponent } from './components/dialogs/product-item-dialog/product-item-dialog.component';
 import {MatIconModule} from '@angular/material/icon';
+import { CartComponent } from './components/storeCart/cart/cart.component';
+import { CartBillingComponent } from './components/storeCart/cart-billing/cart-billing.component';
+import { CartDeliveryComponent } from './components/storeCart/cart-delivery/cart-delivery.component';
+import { CartPaymentComponent } from './components/storeCart/cart-payment/cart-payment.component';
+import { CartShippingComponent } from './components/storeCart/cart-shipping/cart-shipping.component';
 
 @NgModule({
     declarations: [
@@ -64,7 +69,12 @@ import {MatIconModule} from '@angular/material/icon';
         AttributeOptionComponent,
         AttributeOptionDialogComponent,
         AttributeTypeComponent,
-        AttributeTypeDialogComponent
+        AttributeTypeDialogComponent,
+        CartComponent,
+        CartBillingComponent,
+        CartDeliveryComponent,
+        CartPaymentComponent,
+        CartShippingComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true },
