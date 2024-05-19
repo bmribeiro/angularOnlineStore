@@ -1,8 +1,8 @@
-<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+<button class="openDialog" mat-raised-button (click)="openDialog(null)">Adicionar</button>
 
 <div class="mat-elevation-z8">
 
-    <h2>Marcas</h2>
+    <h2>Cateroria</h2>
 
     <table mat-table [dataSource]="productCategoriesSource" matSort (matSortChange)="announceSortChange($event)"
         class="mat-elevation-z8">
@@ -46,6 +46,26 @@
             <td mat-cell *matCellDef="let element"> <ng-container
                     *ngIf="element.sizeCategory; else noSizeCategory">{{element.parentProductCategory.categoryName}}</ng-container>
                 <ng-template #noSizeCategory>N/A</ng-template>
+            </td>
+        </ng-container>
+
+        <!-- Editar -->
+        <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef> Editar </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editElement(element)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Remover -->
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef> Remover </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="deleteElement(element)">
+                    <mat-icon>delete</mat-icon>
+                </button>
             </td>
         </ng-container>
 

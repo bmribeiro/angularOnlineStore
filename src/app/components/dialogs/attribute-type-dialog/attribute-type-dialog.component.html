@@ -2,17 +2,22 @@
 
 <mat-dialog-content>
 
-  <form class="attributeTypeDialogform">
+  <form [formGroup]="formGroup" class="attributeTypeDialogform">
 
-    <mat-form-field class="attributeTypeDialogFullWidth">
+    <mat-form-field class="form-field-full-width">
       <mat-label>Atributo</mat-label>
-      <input matInput [(ngModel)]="data.attributeName" name="attributeName">
+      <input matInput formControlName="attributeName" name="attributeName">
+
+      <mat-error *ngIf="formGroup.get('attributeName')?.touched && formGroup.get('attributeName')?.invalid">
+        Nome é obrigatório.
+      </mat-error>
+
     </mat-form-field>
   </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Ok</button>
 </mat-dialog-actions>

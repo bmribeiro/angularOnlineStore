@@ -20,7 +20,7 @@ import { ProductItemDialogComponent } from '../../dialogs/product-item-dialog/pr
 })
 export class ProductItemComponent {
 
-  displayedColumns: string[] = ['product', 'colour', 'originalPrice', 'salePrice', 'productCode'];
+  displayedColumns: string[] = ['product', 'colour', 'originalPrice', 'salePrice', 'productCode', 'edit', 'delete'];
   productItems: ProductItem[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -33,13 +33,13 @@ export class ProductItemComponent {
 
   constructor(
     private productItemService: ProductItemService,
-    public brandDialog: MatDialog,
+    public productItemDialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,
     private productService: ProductService,
     private colourService: ColourService) { }
 
   async ngOnInit(): Promise<void> {
-    await this.loadBrands();
+    await this.loadProductItems();
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -50,7 +50,7 @@ export class ProductItemComponent {
     this.productItemsSource.sort = this.sort;
   }
 
-  async loadBrands(): Promise<void> {
+  async loadProductItems(): Promise<void> {
     try {
       const data = await this.productItemService.getProductItems().pipe(take(1)).toPromise();
       this.productItems = data as ProductItem[];
@@ -60,7 +60,7 @@ export class ProductItemComponent {
   }
 
   // Dialog
-  async openDialog(): Promise<void> {
+  async openDialog(productItem: ProductItem | null): Promise<void> {
 
     // ProductCategories & Brands
     try {
@@ -74,45 +74,72 @@ export class ProductItemComponent {
       console.error('Erro ao carregar dados:', error);
     }
 
-    const productItemDialogRef = this.brandDialog.open(ProductItemDialogComponent, {
+    const productItemDialogRef = this.productItemDialog.open(ProductItemDialogComponent, {
       data: {
         products: this.products,
-        colours: this.colours
+        colours: this.colours,
+        productItem: productItem
       }
     });
 
     productItemDialogRef.afterClosed().subscribe(result => {
-      if (result
-        && result.selectedProduct
-        && result.selectedColour
-        && result.originalPrice
-        && result.salePrice
-        && result.productCode) {
-
-        const selectedProduct = result.selectedProduct;
-        const selectedColour = result.selectedColour
-
-        // Product Item
-        const productItem = new ProductItemImpl(
-          null,
-          selectedProduct,
-          selectedColour,
-          result.originalPrice,
-          result.salePrice,
-          result.productCode
-        );
+      if (result && result.element) {
 
         // File
-        const file = result.file;
+        const file = result.element.file;
 
-        this.productItemService.addProductItem(productItem, file).subscribe(response => {
-          this.productItems.push(productItem);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar Item Produto:', error);
-        });
+        // New ProductItem
+        if (result.element.productItemId == null) {
+          this.productItemService.addEl(result.element, file).subscribe(response => {
+            this.productItems.push(result.element);
+            console.log('Item adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Item:', error);
+          });
+
+          // Edit ProductItem
+        } else {
+
+          console.log('Editar');
+
+          this.productItemService.updateEl(result.element, file).subscribe(response => {
+            this.productItems.push(result.element);
+            console.log('Item atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Item:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: ProductItem) {
+    if (element.productItemId !== null) {
+      this.productItemService.editEl(element.productItemId).subscribe(response => {
+
+        const productItem: ProductItem = new ProductItemImpl(
+          response.productItemId,
+          response.product,
+          response.colour,
+          response.originalPrice,
+          response.salePrice,
+          response.productCode
+        );
+        this.openDialog(productItem);
+      });
+    } else {
+      console.error('O Item é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: any) {
+    if (element.attributeTypeId !== null) {
+      this.productItemService.deleteEl(element.attributeTypeId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

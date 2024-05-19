@@ -1,0 +1,19 @@
+<ul>
+    <li *ngFor="let productCategory of productCategories">
+        <button (click)="selectMenuItem(productCategory); fathersChildren(productCategory.productCategoryId)">
+            {{ productCategory.categoryName }}
+        </button>
+    </li>
+</ul>
+
+<hr>
+
+<div *ngIf="fatherChildrens.length > 0">
+    <ul>
+        <li *ngFor="let productCategory of fatherChildrens">
+            <button (click)="selectMenuItem(productCategory); fathersChildren(productCategory.productCategoryId)">
+                {{ productCategory.categoryName }}
+            </button>
+        </li>
+    </ul>
+</div>

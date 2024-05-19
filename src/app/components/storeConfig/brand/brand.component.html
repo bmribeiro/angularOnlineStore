@@ -1,4 +1,4 @@
-<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+<button class="openDialog" mat-raised-button (click)="openDialog(null)">Adicionar</button>
 
 <div class="mat-elevation-z8">
 
@@ -9,14 +9,36 @@
 
     <!-- Name -->
     <ng-container matColumnDef="brandName">
-      <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar pelo nome"> Nome </th>
+      <th class="nameCol" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar pelo nome">
+        Nome </th>
       <td mat-cell *matCellDef="let element"> {{element.brandName}} </td>
     </ng-container>
 
     <!-- Description -->
     <ng-container matColumnDef="brandDescription">
-      <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar pela descrição"> Descrição </th>
+      <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
+        sortActionDescription="Ordenar pela descrição"> Descrição </th>
       <td mat-cell *matCellDef="let element"> {{element.brandDescription}} </td>
+    </ng-container>
+
+    <!-- Editar -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef> Editar </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editElement(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Remover -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> Remover </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="warn" (click)="deleteElement(element)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -2,23 +2,30 @@
 
 <mat-dialog-content>
 
-    <form class="colourDialogform">
+    <form [formGroup]="formGroup">
 
-        <mat-form-field class="colourDialogFullWidth">
-            <mat-label>Cor</mat-label>
-            <input matInput [(ngModel)]="data.colourName" name="colourName">
-        </mat-form-field>
+        <div>
+            <mat-form-field class="formFieldFullWidth">
+                <mat-label>Cor</mat-label>
+                <input matInput formControlName="colourName" name="colourName">
 
-        <mat-form-field class="colourDialogFullWidth">
-            <mat-label>Código HEX</mat-label>
-            <input matInput [(ngModel)]="data.colourHex" name="colourHex">
-        </mat-form-field>
+                <mat-error *ngIf="formGroup.get('colourName')?.touched && formGroup.get('colourName')?.invalid">
+                    Campo obrigatório.
+                </mat-error>
 
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="formFieldFullWidth">
+                <mat-label>Código HEX</mat-label>
+                <input matInput formControlName="colourHex" name="colourHex">
+            </mat-form-field>
+        </div>
     </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Ok</button>
 </mat-dialog-actions>

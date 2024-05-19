@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { SizeCategoryService } from '../../../services/size-category.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
-import { SizeCategory } from '../../../models/SizeCategory';
+import { SizeCategory, SizeCategoryImpl } from '../../../models/SizeCategory';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,15 +16,12 @@ import { SizeCategoryDialogComponent } from '../../dialogs/size-category-dialog/
 })
 export class SizeCategoryComponent {
 
-  displayedColumns: string[] = ['sizeCategoryName'];
+  displayedColumns: string[] = ['sizeCategoryName', 'edit', 'delete'];
   sizeCategories: SizeCategory[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   sizeCategoriesSource!: MatTableDataSource<SizeCategory, MatPaginator>;
-
-  // Dialog Fields
-  sizeCategoryName!: string;
 
   constructor(
     private sizeCategoryService: SizeCategoryService,
@@ -54,28 +51,67 @@ export class SizeCategoryComponent {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(sizeCategory: SizeCategory | null): Promise<void> {
 
-    const sizeCategoryData: SizeCategory = {
-      sizeCategoryId: null,
-      sizeCategoryName: this.sizeCategoryName
-    };
+    console.log(sizeCategory);
 
     const sizeCategoryDialogRef = this.sizeCategoryDialog.open(SizeCategoryDialogComponent, {
-      data: sizeCategoryData,
+      data: {
+        sizeCategory: sizeCategory ? sizeCategory : null
+      }
     });
 
     sizeCategoryDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.sizeCategoryService.addSizeCategory(sizeCategoryData).subscribe(response => {
-          console.log(sizeCategoryData);
-          this.sizeCategories.push(sizeCategoryData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+      if (result && result.element) {
+
+        // New SizeCategory
+        if (result.element.attributeOptionId == null) {
+          this.sizeCategoryService.addEl(result.element).subscribe(response => {
+            this.sizeCategories.push(result.element);
+            console.log('Opção Atributo adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Opção Atributo:', error);
+          });
+
+          // Edit SizeCategory
+        } else {
+
+          console.log('Edit' + result.element);
+
+          this.sizeCategoryService.updateEl(result.element).subscribe(response => {
+            this.sizeCategories.push(result.element);
+            console.log('Opção Atributo atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Opção Atributo:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: SizeCategory) {
+    if (element.sizeCategoryId !== null) {
+      this.sizeCategoryService.editEl(element.sizeCategoryId).subscribe(response => {
+
+        const attributeOption: SizeCategory = new SizeCategoryImpl(
+          response.sizeCategoryId,
+          response.sizeCategoryName
+        );
+        this.openDialog(attributeOption);
+      });
+    } else {
+      console.error('O atributo optionId é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: SizeCategory) {
+    if (element.sizeCategoryId !== null) {
+      this.sizeCategoryService.deleteEl(element.sizeCategoryId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

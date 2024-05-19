@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Colour } from '../../../models/Colour';
+import { Colour, ColourImpl } from '../../../models/Colour';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -16,16 +16,12 @@ import { ColourDialogComponent } from '../../dialogs/colour-dialog/colour-dialog
 })
 export class ColourComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['colourName', 'colourHex'];
+  displayedColumns: string[] = ['colourName', 'colourHex', 'edit', 'delete'];
   colours: Colour[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   coloursSource!: MatTableDataSource<Colour, MatPaginator>;
-
-  // Dialog Fields
-  colourName!: string;
-  colourHex!: string;
 
   constructor(
     private colourService: ColourService,
@@ -54,28 +50,66 @@ export class ColourComponent implements OnInit, AfterViewInit {
   }
 
   // Dialog
-  openDialog(): void {
-
-    const colourData: Colour = {
-      colourId: null,
-      colourName: this.colourName,
-      colourHex: this.colourHex
-    };
+  async openDialog(colour: Colour | null): Promise<void> {
 
     const colourDialogRef = this.colourDialog.open(ColourDialogComponent, {
-      data: colourData,
+      data: {
+        colour: colour ? colour : null
+      }
     });
 
     colourDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.colourService.addColour(colourData).subscribe(response => {
-          this.colours.push(colourData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+      if (result && result.element) {
+
+        console.log('Close' + result.element);
+
+        // New Colour
+        if (result.element.attributeOptionId == null) {
+          this.colourService.addEl(result.element).subscribe(response => {
+            this.colours.push(result.element);
+            console.log('Cor adicionada com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Cor:', error);
+          });
+
+          // Edit Colour
+        } else {
+          this.colourService.updateEl(result.element).subscribe(response => {
+            this.colours.push(result.element);
+            console.log('Opção Atributo atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Cor:', error);
+          });
+        }
+
       }
     });
+  }
+
+  // Editar
+  editElement(element: Colour) {
+    if (element.colourId !== null) {
+      this.colourService.editEl(element.colourId).subscribe(response => {
+
+        const colour: Colour = new ColourImpl(
+          response.colourId,
+          response.colourName,
+          response.colourHex
+        );
+        this.openDialog(colour);
+      });
+    } else {
+      console.error('O colourId é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: any) {
+    if (element.colourId !== null) {
+      this.colourService.deleteEl(element.colourId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

@@ -1,1 +1,41 @@
-<p>size-option-dialog works!</p>
+<h2 mat-dialog-title>Tamanho</h2>
+
+<mat-dialog-content>
+
+    <form [formGroup]="formGroup">
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Nome Tamanho</mat-label>
+            <input matInput formControlName="sizeName" name="sizeName">
+            <mat-error *ngIf="formGroup.get('sizeName')?.touched && formGroup.get('sizeName')?.invalid">
+                Tamanho é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Ordem</mat-label>
+            <input matInput formControlName="sortOrder" name="sortOrder">
+            <mat-error *ngIf="formGroup.get('sortOrder')?.touched && formGroup.get('sortOrder')?.invalid">
+                Ordem é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Categoria Tamanho</mat-label>
+            <mat-select formControlName="sizeCategory" name="sizeCategory" [compareWith]="compareFunction">
+                <mat-option *ngFor="let sizeCategory of sizeCategories" [value]="sizeCategory">
+                    {{ sizeCategory.sizeCategoryName }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get('sizeCategory')?.touched && formGroup.get('attributeType')?.invalid">
+                Categoria Tamanho é obrigatório.
+            </mat-error>
+        </mat-form-field>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
+</mat-dialog-actions>

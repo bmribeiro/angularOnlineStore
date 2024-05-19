@@ -8,7 +8,7 @@ import { CorsInterceptor } from './interceptors/cors.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BrandDialogComponent } from './components/dialogs/brand-dialog/brand-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { SizeCategoryComponent } from './components/storeConfig/size-category/size-category.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { MenuBarComponent } from './components/header/menu-bar.component';
+import { MenuBarComponent } from './header/menu-bar.component';
 import { SizeCategoryDialogComponent } from './components/dialogs/size-category-dialog/size-category-dialog.component';
 import { ColourComponent } from './components/storeConfig/colour/colour.component';
 import { ColourDialogComponent } from './components/dialogs/colour-dialog/colour-dialog.component';
@@ -44,6 +44,9 @@ import { CartBillingComponent } from './components/storeCart/cart-billing/cart-b
 import { CartDeliveryComponent } from './components/storeCart/cart-delivery/cart-delivery.component';
 import { CartPaymentComponent } from './components/storeCart/cart-payment/cart-payment.component';
 import { CartShippingComponent } from './components/storeCart/cart-shipping/cart-shipping.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ProductVariationDialogComponent } from './components/dialogs/product-variation-dialog/product-variation-dialog.component';
+import { SizeOptionDialogComponent } from './components/dialogs/size-option-dialog/size-option-dialog.component';
 
 @NgModule({
     declarations: [
@@ -63,7 +66,9 @@ import { CartShippingComponent } from './components/storeCart/cart-shipping/cart
         ProductItemDialogComponent,
         ProductImageComponent,
         ProductVariationComponent,
+        ProductVariationDialogComponent,
         SizeOptionComponent,
+        SizeOptionDialogComponent,
         ProductAttributeComponent,
         ProductAttributeDialogComponent,
         AttributeOptionComponent,
@@ -101,7 +106,8 @@ import { CartShippingComponent } from './components/storeCart/cart-shipping/cart
         MatSortModule,
         MatMenuModule,
         MatSelectModule,
-        MatIconModule
+        MatIconModule,
+        NoopAnimationsModule 
     ],
 })
 export class AppModule { }

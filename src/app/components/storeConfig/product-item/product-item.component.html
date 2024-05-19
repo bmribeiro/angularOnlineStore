@@ -1,4 +1,4 @@
-<button class="openDialog" mat-raised-button (click)="openDialog()">Adicionar</button>
+<button class="openDialog" mat-raised-button (click)="openDialog(null)">Adicionar</button>
 
 <div class="mat-elevation-z8">
 
@@ -40,6 +40,26 @@
             <th class="descriptionCol" mat-header-cell *matHeaderCellDef mat-sort-header
                 sortActionDescription="Ordenar pelo Código de Produto"> Código Produto </th>
             <td mat-cell *matCellDef="let element"> {{element.productCode}} </td>
+        </ng-container>
+
+        <!-- Editar -->
+        <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef> Editar </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editElement(element)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Remover -->
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef> Remover </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="deleteElement(element)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

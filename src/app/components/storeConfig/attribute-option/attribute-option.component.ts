@@ -18,7 +18,6 @@ import { AttributeTypeService } from '../../../services/attribute-type.service';
 })
 export class AttributeOptionComponent {
 
-
   displayedColumns: string[] = ['attributeType', 'attributeOptionName', 'edit', 'delete'];
   attributeOptions: AttributeOption[] = [];
 
@@ -99,6 +98,7 @@ export class AttributeOptionComponent {
     });
   }
 
+  // Editar
   editElement(element: AttributeOption) {
     if (element.attributeOptionId !== null) {
       this.attributeOptionService.editElement(element.attributeOptionId).subscribe(response => {
@@ -115,6 +115,7 @@ export class AttributeOptionComponent {
     }
   }
 
+  // Apagar
   deleteElement(element: any) {
     if (element.attributeOptionId !== null) {
       this.attributeOptionService.deleteAttributeOption(element.attributeOptionId).subscribe(response => {

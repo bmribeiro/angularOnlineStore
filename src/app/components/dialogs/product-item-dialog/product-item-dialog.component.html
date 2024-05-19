@@ -2,29 +2,29 @@
 
 <mat-dialog-content>
 
-    <form class="attributeOptionDialogform">
+    <form [formGroup]="formGroup">
 
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Produto</mat-label>
-            <mat-select [(ngModel)]="selectedProduct" name="product">
+            <mat-select formControlName="product" name="product" [compareWith]="compareProductFunction">
                 <mat-option *ngFor="let product of products" [value]="product">
                     {{ product.productName }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Cor</mat-label>
-            <mat-select [(ngModel)]="selectedColour" name="colour">
+            <mat-select formControlName="colour" name="colour" [compareWith]="compareColourFunction">
                 <mat-option *ngFor="let colour of colours" [value]="colour">
                     {{ colour.colourName }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
 
-        <div class="file-upload">
+        <div class="fileUpload">
 
             {{fileName || "No file uploaded yet."}}
 
@@ -34,28 +34,28 @@
         </div>
 
         <!-- Preço -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Preço</mat-label>
-            <input matInput [(ngModel)]="originalPrice" name="originalPrice">
+            <input matInput formControlName="originalPrice" name="originalPrice">
         </mat-form-field>
 
         <!-- Promo -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Promo</mat-label>
-            <input matInput [(ngModel)]="salePrice" name="salePrice">
+            <input matInput formControlName="salePrice" name="salePrice">
         </mat-form-field>
 
         <!-- Código -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Código</mat-label>
-            <input matInput [(ngModel)]="productCode" name="productCode">
+            <input matInput formControlName="productCode" name="productCode">
         </mat-form-field>
 
     </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button (click)="confirm()">Confirmar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
 </mat-dialog-actions>

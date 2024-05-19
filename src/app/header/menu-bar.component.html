@@ -2,8 +2,9 @@
 
 <hr>
 
-<button class="container" mat-button [matMenuTriggerFor]="menu">Menu</button>
-<mat-menu #menu="matMenu">
+<button mat-button [matMenuTriggerFor]="config">Configurações</button>
+
+<mat-menu #config="matMenu">
     <button routerLink="/colours" mat-menu-item>Cor</button>
     <button routerLink="/brands" mat-menu-item>Marcas</button>
     <button routerLink="/sizeCategories" mat-menu-item>Tamanho Categorias</button>
@@ -16,3 +17,5 @@
     <button routerLink="/attributeOption" mat-menu-item>Atributo Opção</button>
     <button routerLink="/attributeType" mat-menu-item>Atributo Tipo</button>
 </mat-menu>
+
+<button mat-button routerLink="/store">Loja</button>

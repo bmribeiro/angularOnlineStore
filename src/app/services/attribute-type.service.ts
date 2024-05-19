@@ -32,4 +32,27 @@ export class AttributeTypeService {
     // Solicitação HTTP POST
     return this.http.post<any>(this.apiUrl, JSON.stringify(attributeType), { headers: headers });
   }
+
+  // GET BY ID
+  editElement(attributeTypeId: number) {
+    return this.http.get<AttributeType>(`${this.apiUrl}/${attributeTypeId}`);
+  }
+
+  // UPDATE
+  updateAttributeType(attributeType: AttributeType) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<AttributeType>(this.apiUrl, JSON.stringify(attributeType), { headers });
+  }
+
+  // DELETE
+  deleteElement(attributeTypeId: number) {
+    return this.http.delete(`${this.apiUrl}/${attributeTypeId}`);
+  }
+
+
+
 }

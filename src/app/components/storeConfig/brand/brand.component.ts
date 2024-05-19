@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { BrandService } from '../../../services/brand.service';
-import { Brand } from '../../../models/Brand';
+import { Brand, BrandImpl } from '../../../models/Brand';
 import { MatDialog } from '@angular/material/dialog';
 import { BrandDialogComponent } from '../../dialogs/brand-dialog/brand-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -16,16 +16,12 @@ import { take } from 'rxjs';
 })
 export class BrandComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['brandName', 'brandDescription'];
+  displayedColumns: string[] = ['brandName', 'brandDescription', 'edit', 'delete'];
   brands: Brand[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   brandsSource!: MatTableDataSource<Brand, MatPaginator>;
-
-  // Dialog Fields
-  brandName!: string;
-  brandDescription!: string;
 
   constructor(
     private brandService: BrandService,
@@ -54,28 +50,65 @@ export class BrandComponent implements OnInit, AfterViewInit {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(brand: Brand | null): Promise<void> {
 
-    const brandData: Brand = {
-      brandId: null,
-      brandName: this.brandName,
-      brandDescription: this.brandDescription
-    };
+    console.log('Component' + JSON.stringify(brand));
 
     const brandDialogRef = this.brandDialog.open(BrandDialogComponent, {
-      data: brandData,
+      data: {
+        brand: brand ? brand : null
+      }
     });
 
     brandDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.brandService.addBrand(brandData).subscribe(response => {
-          this.brands.push(brandData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+      if (result && result.element) {
+
+        // New Brand
+        if (result.element.brandId == null) {
+          this.brandService.addEl(result.element).subscribe(response => {
+            this.brands.push(result.element);
+            console.log('Marca adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Marca:', error);
+          });
+
+          // Edit Brand
+        } else {
+          this.brandService.updateEl(result.element).subscribe(response => {
+            this.brands.push(result.element);
+            console.log('Marca atualizada com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Marca:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: Brand) {
+    if (element.brandId !== null) {
+      this.brandService.editEl(element.brandId).subscribe(response => {
+
+        const brand: Brand = new BrandImpl(
+          response.brandId,
+          response.brandName,
+          response.brandDescription
+        );
+        this.openDialog(brand);
+      });
+    } else {
+      console.error('O brandId é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: Brand) {
+    if (element.brandId !== null) {
+      this.brandService.deleteEl(element.brandId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

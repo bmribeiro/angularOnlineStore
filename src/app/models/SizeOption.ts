@@ -4,7 +4,7 @@ export interface SizeOption {
     sizeOptionId: number | null;
     sizeName: string;
     sortOrder: number;
-    sizeCategory: SizeCategory
+    sizeCategory: SizeCategory | null
 }
 
 export class SizeOptionImpl implements SizeOption {
@@ -12,6 +12,6 @@ export class SizeOptionImpl implements SizeOption {
         public sizeOptionId: number | null,
         public sizeName: string,
         public sortOrder: number,
-        public sizeCategory: SizeCategory
+        public sizeCategory: SizeCategory | null
     ) { }
 }

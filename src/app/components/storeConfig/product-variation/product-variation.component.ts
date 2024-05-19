@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ProductVariationDialogComponent } from '../../dialogs/product-variation-dialog/product-variation-dialog.component';
-import { ProductVariation } from '../../../models/ProductVariation';
+import { ProductVariation, ProductVariationImpl } from '../../../models/ProductVariation';
 import { ProductItem } from '../../../models/ProductItem';
 import { SizeOption } from '../../../models/SizeOption';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -10,6 +10,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { ProductVariationService } from '../../../services/product-variation.service';
+import { ProductItemService } from '../../../services/product-item.service';
+import { SizeOptionService } from '../../../services/size-option.service';
 
 @Component({
   selector: 'app-product-variation',
@@ -18,20 +20,21 @@ import { ProductVariationService } from '../../../services/product-variation.ser
 })
 export class ProductVariationComponent {
 
-  displayedColumns: string[] = ['productItem', 'size', 'quantityInStock'];
+  displayedColumns: string[] = ['productItem', 'size', 'quantityInStock', 'edit', 'delete'];
   productVariations: ProductVariation[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   productVariationsSource!: MatTableDataSource<ProductVariation, MatPaginator>;
 
-  // Dialog Fields
-  productItem!: ProductItem;
-  size!: SizeOption;
-  qtyInStock!: number;
+  // Dialog Combo Field
+  productItems!: ProductItem[];
+  sizeOptions!: SizeOption[];
 
   constructor(
     private productVariationService: ProductVariationService,
+    private productItemService: ProductItemService,
+    private sizeOptionService: SizeOptionService,
     public productVariationDialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer) { }
 
@@ -57,29 +60,85 @@ export class ProductVariationComponent {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(productVariation: ProductVariation | null): Promise<void> {
 
-    const productVariationData: ProductVariation = {
-      productVariationId: null,
-      productItem: this.productItem,
-      size: this.size,
-      qtyInStock: this.qtyInStock
-    };
+    // ProductItems
+    try {
+      const data = await this.productItemService.getProductItems().pipe(take(1)).toPromise();
+      this.productItems = data as ProductItem[];
+    } catch (error) {
+      console.error('Erro ao carregar ProductItem:', error);
+    }
+
+    // SizeOptions
+    try {
+      const data = await this.sizeOptionService.getSizeOptions().pipe(take(1)).toPromise();
+      this.sizeOptions = data as SizeOption[];
+    } catch (error) {
+      console.error('Erro ao carregar SizeOption:', error);
+    }
 
     const productVariationDialogRef = this.productVariationDialog.open(ProductVariationDialogComponent, {
-      data: productVariationData,
+      data: {
+        productItems: this.productItems,
+        sizeOptions: this.sizeOptions,
+        productVariation: productVariation ? productVariation : null
+      }
     });
 
     productVariationDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.productVariationService.addProductVariation(productVariationData).subscribe(response => {
-          this.productVariations.push(productVariationData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+      if (result && result.element) {
+
+        // New AttributeOption
+        if (result.element.productVariationId == null) {
+          this.productVariationService.addEl(result.element).subscribe(response => {
+            this.productVariations.push(result.element);
+            console.log('Variação adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Variação:', error);
+          });
+
+          // Edit AttributeOption
+        } else {
+          this.productVariationService.updateEl(result.element).subscribe(response => {
+            this.productVariations.push(result.element);
+            console.log('Opção Atributo atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Opção Atributo:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: ProductVariation) {
+
+    console.log(element.productVariationId);
+
+    if (element.productVariationId !== null) {
+      this.productVariationService.editEl(element.productVariationId).subscribe(response => {
+
+        const productVariation: ProductVariation = new ProductVariationImpl(
+          response.productVariationId,
+          response.productItem,
+          response.size,
+          response.qtyInStock
+        );
+        this.openDialog(productVariation);
+      });
+    } else {
+      console.error('ProductVariation é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: any) {
+    if (element.productVariationId !== null) {
+      this.productVariationService.deleteEl(element.productVariationId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

@@ -23,7 +23,7 @@ export class ProductAttributeService {
   }
 
   // POST
-  addProductAttribute(productAttribute: ProductAttribute): Observable<any> {
+  addEl(productAttribute: ProductAttribute): Observable<any> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -31,6 +31,26 @@ export class ProductAttributeService {
 
     // Solicitação HTTP POST
     return this.http.post<any>(this.apiUrl, JSON.stringify(productAttribute), { headers: headers });
+  }
+
+  // GET BY ID
+  editEl(productAttributeId: number) {
+    return this.http.get<ProductAttribute>(`${this.apiUrl}/${productAttributeId}`);
+  }
+
+  // UPDATE
+  updateEl(productAttribute: ProductAttribute) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<ProductAttribute>(this.apiUrl, JSON.stringify(productAttribute), { headers });
+  }
+
+  // DELETE
+  deleteEl(productAttributeId: number) {
+    return this.http.delete(`${this.apiUrl}/${productAttributeId}`);
   }
 
 }

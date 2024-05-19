@@ -20,7 +20,7 @@ import { BrandService } from '../../../services/brand.service';
 })
 export class ProductComponent {
 
-  displayedColumns: string[] = ['productCategory', 'brand', 'productName', 'productDescription', 'careInstructions', 'about'];
+  displayedColumns: string[] = ['productCategory', 'brand', 'productName', 'productDescription', 'careInstructions', 'about', 'edit', 'delete'];
   products: Product[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -60,7 +60,7 @@ export class ProductComponent {
   }
 
   // Dialog
-  async openDialog(): Promise<void> {
+  async openDialog(product: Product | null): Promise<void> {
 
     // ProductCategories & Brands
     try {
@@ -77,44 +77,67 @@ export class ProductComponent {
     const productDialogRef = this.productDialog.open(ProductDialogComponent, {
       data: {
         dataProductCategories: this.productCategories,
-        dataBrands: this.brands
+        dataBrands: this.brands,
+        product: product ? product : null
       },
     });
 
     productDialogRef.afterClosed().subscribe(result => {
-      if (result
-        && result.selectedProductCategory
-        && result.selectedBrand
-        && result.productName
-        && result.productDescription
-        && result.careInstructions
-        && result.about) {
 
-        const selectedAttributeType = result.selectedProductCategory;
-        const selectedBrand = result.selectedBrand
-
-        // Product
-        const product = new ProductImpl(
-          null,
-          selectedAttributeType,
-          selectedBrand,
-          result.productName,
-          result.productDescription,
-          result.careInstructions,
-          result.about
-        );
+      if (result && result.element) {
 
         // File
-        const file = result.file;
+        const file = result.element.file;
 
-        this.productService.addProduct(product, file).subscribe(response => {
-          this.products.push(product);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+        // New Product
+        if (result.element.productId == null) {
+          this.productService.addEl(result.element, file).subscribe(response => {
+            this.productCategories.push(result.element);
+            console.log('Categoria adicionada com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Categoria:', error);
+          });
+
+          // Edit Product
+        } else {
+          this.productService.updateEl(result.element, file).subscribe(response => {
+            this.productCategories.push(result.element);
+            console.log('Categoria atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Categoria:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: Product) {
+    if (element.productId !== null) {
+      this.productService.editEl(element.productId).subscribe(response => {
+
+        const product: Product = new ProductImpl(
+          response.productId,
+          response.productCategory,
+          response.brand,
+          response.productName,
+          response.productDescription,
+          response.careInstructions,
+          response.about);
+        this.openDialog(product);
+      });
+    } else {
+      console.error('O productId é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: any) {
+    if (element.attributeOptionId !== null) {
+      this.productService.deleteEl(element.attributeOptionId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

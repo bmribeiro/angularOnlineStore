@@ -1,3 +1,7 @@
-.file-input {
+.fileInput {
     display: none;
+}
+
+.formFieldFullWidth {
+    width: 100%;
 }

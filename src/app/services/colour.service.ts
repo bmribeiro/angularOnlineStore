@@ -22,7 +22,7 @@ export class ColourService {
   }
 
   // POST
-  addColour(colour: Colour): Observable<any> {
+  addEl(colour: Colour): Observable<any> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -30,6 +30,26 @@ export class ColourService {
 
     // Solicitação HTTP POST
     return this.http.post<any>(this.apiUrl, JSON.stringify(colour), { headers: headers });
+  }
+
+  // GET BY ID
+  editEl(attributeOptionId: number) {
+    return this.http.get<Colour>(`${this.apiUrl}/${attributeOptionId}`);
+  }
+
+  // UPDATE
+  updateEl(colour: Colour) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Colour>(this.apiUrl, JSON.stringify(colour), { headers });
+  }
+
+  // DELETE
+  deleteEl(colourId: number) {
+    return this.http.delete(`${this.apiUrl}/${colourId}`);
   }
 
 }

@@ -2,23 +2,27 @@
 
 <mat-dialog-content>
 
-  <form class="brandDialogform">
+  <form [formGroup]="formGroup">
 
-    <mat-form-field class="brandDialogFullWidth">
+    <mat-form-field class="formFieldFullWidth">
       <mat-label>Marca</mat-label>
-      <input matInput [(ngModel)]="data.brandName" name="brandName">
+      <input matInput formControlName="brandName" name="brandName">
+
+      <mat-error *ngIf="formGroup.get('brandName')?.touched && formGroup.get('brandName')?.invalid">
+        Campo obrigatório.
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="brandDialogFullWidth">
+    <mat-form-field class="formFieldFullWidth">
       <mat-label>Descrição</mat-label>
-      <textarea matInput [(ngModel)]="data.brandDescription" name="brandDescription"></textarea>
+      <textarea matInput formControlName="brandDescription" name="brandDescription"></textarea>
     </mat-form-field>
 
   </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Ok</button>
 </mat-dialog-actions>

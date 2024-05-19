@@ -2,20 +2,21 @@
 
 <mat-dialog-content>
 
-    <form class="attributeOptionDialogform">
+    <form [formGroup]="formGroup">
 
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Categoria</mat-label>
-            <mat-select [(ngModel)]="selectedProductCategory" name="productCategory">
+            <mat-select formControlName="productCategory" name="productCategory"
+                [compareWith]="compareProductCategoryFunction">
                 <mat-option *ngFor="let productCategory of productCategories" [value]="productCategory">
                     {{ productCategory.categoryName }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Marca</mat-label>
-            <mat-select [(ngModel)]="selectedBrand" name="brand">
+            <mat-select formControlName="brand" name="brand" [compareWith]="compareBrandFunction">
                 <mat-option *ngFor="let brand of brands" [value]="brand">
                     {{ brand.brandName }}
                 </mat-option>
@@ -23,19 +24,19 @@
         </mat-form-field>
 
         <!-- Nome -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Nome</mat-label>
-            <input matInput [(ngModel)]="productName" name="productName">
+            <input matInput formControlName="productName" name="productName">
         </mat-form-field>
 
         <!-- Descrição -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Descrição</mat-label>
-            <input matInput [(ngModel)]="productDescription" name="productDescription">
+            <input matInput formControlName="productDescription" name="productDescription">
         </mat-form-field>
 
         <!-- Imagem -->
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
 
         <div class="file-upload">
 
@@ -47,22 +48,22 @@
         </div>
 
         <!-- Instruções -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Instruções</mat-label>
-            <input matInput [(ngModel)]="careInstructions" name="careInstructions">
+            <input matInput formControlName="careInstructions" name="careInstructions">
         </mat-form-field>
 
         <!-- Sobre -->
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Sobre</mat-label>
-            <input matInput [(ngModel)]="about" name="about">
+            <input matInput formControlName="about" name="about">
         </mat-form-field>
 
     </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button (click)="confirm()">Confirmar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
 </mat-dialog-actions>

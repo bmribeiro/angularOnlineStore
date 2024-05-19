@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { BrandComponent } from './components/storeConfig/brand/brand.component';
 import { SizeCategoryComponent } from './components/storeConfig/size-category/size-category.component';
 import { ColourComponent } from './components/storeConfig/colour/colour.component';
@@ -26,11 +26,18 @@ const routes: Routes = [
   { path: 'sizeOptions', component: SizeOptionComponent },
   { path: 'productAttribute', component: ProductAttributeComponent },
   { path: 'attributeOption', component: AttributeOptionComponent },
-  { path: 'attributeType', component: AttributeTypeComponent }
+  { path: 'attributeType', component: AttributeTypeComponent },
+
+  // Store
+  {
+    path: 'store', loadChildren:
+      () => import('./store/store.module').then(m => m.StoreModule)
+
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

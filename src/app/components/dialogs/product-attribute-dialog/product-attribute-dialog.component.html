@@ -4,15 +4,37 @@
 
   <form class="attributeTypeDialogform">
 
-    <mat-form-field class="attributeTypeDialogFullWidth">
-      <mat-label>Atributo</mat-label>
-      <input matInput [(ngModel)]="data.attributeName" name="brandName">
+    <mat-form-field class="formFieldFullWidth">
+      <mat-label>Produto</mat-label>
+      <mat-select formControlName="product" name="product" [compareWith]="compareProductFunction">
+        <mat-option *ngFor="let product of products" [value]="product">
+          {{ product.productName }}
+        </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="formGroup.get('product')?.touched && formGroup.get('product')?.invalid">
+        Tipo de atributo é obrigatório.
+      </mat-error>
     </mat-form-field>
+
+    <mat-form-field class="formFieldFullWidth">
+      <mat-label>Atributo</mat-label>
+      <mat-select formControlName="attributeType" name="attributeType" [compareWith]="compareAttributeOptionFunction">
+        <mat-option *ngFor="let attributeOption of attributeOptions" [value]="attributeOption">
+          {{ attributeOption.attributeOptionName }}
+        </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="formGroup.get('attributeType')?.touched && formGroup.get('attributeType')?.invalid">
+        Tipo de atributo é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
   </form>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancelar</button>
   <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
 </mat-dialog-actions>

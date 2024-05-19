@@ -1,15 +1,21 @@
 <h2 mat-dialog-title>Caterogia de Produto</h2>
 
-<mat-dialog-content>
+<div mat-dialog-content>
 
-    <form class="productCategoryDialogform">
+    <form [formGroup]="formGroup">
 
-        <mat-form-field class="productCategoryDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Categoria</mat-label>
-            <input matInput [(ngModel)]="categoryName" name="categoryName">
+            <input matInput formControlName="categoryName" name="categoryName">
+            <mat-hint>Introduza o nome da Categoria</mat-hint>
+
+            <!-- Error -->
+            <mat-error *ngIf="formGroup.get('categoryName')?.touched && formGroup.get('categoryName')?.invalid">
+                Tipo de atributo é obrigatório.
+            </mat-error>
         </mat-form-field>
 
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
 
         <div class="file-upload">
 
@@ -20,34 +26,32 @@
             </button>
         </div>
 
-        <mat-form-field class="productCategoryDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Descrição</mat-label>
-            <textarea matInput [(ngModel)]="categoryDescription" name="categoryDescription"></textarea>
+            <textarea matInput formControlName="categoryDescription" name="categoryDescription"></textarea>
         </mat-form-field>
-
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Categoria Tamanho</mat-label>
-            <mat-select [(ngModel)]="selectedSize" name="selectedSize">
+            <mat-select formControlName="sizeCategory" name="sizeCategory" [compareWith]="compareSizeCategoryFunction">
                 <mat-option *ngFor="let size of sizes" [value]="size">
                     {{ size.sizeCategoryName }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-
-        <mat-form-field class="attributeOptionDialogFullWidth">
+        <mat-form-field class="formFieldFullWidth">
             <mat-label>Categoria Pai</mat-label>
-            <mat-select [(ngModel)]="selectedParentCategory" name="selectedParentCategory">
+            <mat-select formControlName="parentProductCategory" name="parentProductCategory"
+                [compareWith]="compareProductCategoryFunction">
                 <mat-option *ngFor="let parentCategory of parentCategories" [value]="parentCategory">
                     {{ parentCategory.categoryName }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-
     </form>
 
-</mat-dialog-content>
+</div>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button (click)="confirm()">Confirmar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
 </mat-dialog-actions>

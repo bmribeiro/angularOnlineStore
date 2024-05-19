@@ -22,7 +22,7 @@ export class BrandService {
   }
 
   // POST
-  addBrand(brand: Brand): Observable<any> {
+  addEl(brand: Brand): Observable<any> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -31,5 +31,26 @@ export class BrandService {
     // Solicitação HTTP POST
     return this.http.post<any>(this.apiUrl, JSON.stringify(brand), { headers: headers });
   }
+
+  // GET BY ID
+  editEl(brandId: number) {
+    return this.http.get<Brand>(`${this.apiUrl}/${brandId}`);
+  }
+
+  // UPDATE
+  updateEl(brand: Brand) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Brand>(this.apiUrl, JSON.stringify(brand), { headers });
+  }
+
+  // DELETE
+  deleteEl(brandId: number) {
+    return this.http.delete(`${this.apiUrl}/${brandId}`);
+  }
+
 
 }

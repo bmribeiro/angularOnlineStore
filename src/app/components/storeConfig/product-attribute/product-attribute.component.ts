@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ProductAttribute } from '../../../models/ProductAttribute';
+import { ProductAttribute, ProductAttributeImpl } from '../../../models/ProductAttribute';
 import { AttributeOption } from '../../../models/AttributeOption';
 import { Product } from '../../../models/Product';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -10,6 +10,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { ProductAttributeService } from '../../../services/product-attribute.service';
 import { ProductAttributeDialogComponent } from '../../dialogs/product-attribute-dialog/product-attribute-dialog.component';
+import { ProductService } from '../../../services/product.service';
+import { AttributeOptionService } from '../../../services/attribute-option.service';
 
 @Component({
   selector: 'app-product-attribute',
@@ -18,19 +20,21 @@ import { ProductAttributeDialogComponent } from '../../dialogs/product-attribute
 })
 export class ProductAttributeComponent {
 
-  displayedColumns: string[] = ['product', 'attributeOption'];
+  displayedColumns: string[] = ['product', 'attributeOption', 'edit', 'delete'];
   productAttributes: ProductAttribute[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   productAttributesSource!: MatTableDataSource<ProductAttribute, MatPaginator>;
 
-  // Dialog Fields
-  product!: Product;
-  attributeOption!: AttributeOption;
+  // Dialog Combo Field
+  products!: Product[];
+  attributeOptions!: AttributeOption[];
 
   constructor(
     private productAttributeService: ProductAttributeService,
+    private productService: ProductService,
+    private attributeOptionService: AttributeOptionService,
     public productAttributeDialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer) { }
 
@@ -56,27 +60,78 @@ export class ProductAttributeComponent {
   }
 
   // Dialog
-  openDialog(): void {
+  async openDialog(productAttribute: ProductAttribute | null): Promise<void> {
 
-    const productAttributeData: ProductAttribute = {
-      product: this.product,
-      attributeOption: this.attributeOption
-    };
+    // AttributeTypes
+    try {
+      const dataProducts = await this.productService.getProducts().pipe(take(1)).toPromise();
+      this.products = dataProducts as Product[];
+
+      const dataAttributeOption = await this.attributeOptionService.getAttributeOptions().pipe(take(1)).toPromise();
+      this.attributeOptions = dataAttributeOption as AttributeOption[];
+
+    } catch (error) {
+      console.error('Erro ao carregar atributos:', error);
+    }
 
     const productAttributeDialogRef = this.productAttributeDialog.open(ProductAttributeDialogComponent, {
-      data: productAttributeData,
+      data: {
+        products: this.products,
+        attributeOptions: this.attributeOptions,
+        productAttribute: productAttribute ? productAttribute : null
+      }
     });
 
     productAttributeDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.productAttributeService.addProductAttribute(productAttributeData).subscribe(response => {
-          this.productAttributes.push(productAttributeData);
-          console.log('Marca adicionada com sucesso:', response);
-        }, error => {
-          console.error('Erro ao adicionar marca:', error);
-        });
+
+      if (result && result.element) {
+
+        // New AttributeOption
+        if (result.element.attributeOptionId == null) {
+          this.productAttributeService.addEl(result.element).subscribe(response => {
+            this.attributeOptions.push(result.element);
+            console.log('Opção Atributo adicionado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao adicionar Opção Atributo:', error);
+          });
+
+          // Edit AttributeOption
+        } else {
+          this.productAttributeService.updateEl(result.element).subscribe(response => {
+            this.attributeOptions.push(result.element);
+            console.log('Opção Atributo atualizado com sucesso:', response);
+          }, error => {
+            console.error('Erro ao atualizar Opção Atributo:', error);
+          });
+        }
       }
     });
+  }
+
+  // Editar
+  editElement(element: ProductAttribute) {
+    if (element.productAttributeId !== null) {
+      this.productAttributeService.editEl(element.productAttributeId).subscribe(response => {
+
+        const sizeOption: ProductAttribute = new ProductAttributeImpl(
+          response.productAttributeId,
+          response.product,
+          response.attributeOption,
+        );
+        this.openDialog(sizeOption);
+      });
+    } else {
+      console.error('O atributo sizeOptionId é nulo.');
+    }
+  }
+
+  // Apagar
+  deleteElement(element: any) {
+    if (element.productAttributeId !== null) {
+      this.productAttributeService.deleteEl(element.productAttributeId).subscribe(response => {
+        console.log('Elemento eliminado com sucesso', response);
+      });
+    }
   }
 
   // Sort

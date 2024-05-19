@@ -1,1 +1,50 @@
-<p>product-variation-dialog works!</p>
+<h2 mat-dialog-title>Variação</h2>
+
+<mat-dialog-content>
+
+    <form [formGroup]="formGroup" class="attributeOptionDialogform">
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Item</mat-label>
+            <mat-select formControlName="productItem" name="productItem" [compareWith]="compareProductItemFunction">
+                <mat-option *ngFor="let productItem of productItems" [value]="productItem">
+                    {{ productItem.product }}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="formGroup.get('productItem')?.touched && formGroup.get('productItem')?.invalid">
+                Item é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Tamanho</mat-label>
+            <mat-select formControlName="sizeOption" name="sizeOption" [compareWith]="compareSizeOptionFunction">
+                <mat-option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">
+                    {{ sizeOption.sizeName }}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="formGroup.get('sizeOption')?.touched && formGroup.get('sizeOption')?.invalid">
+                Tamanho é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Quantidade</mat-label>
+            <input matInput formControlName="qtyInStock" name="qtyInStock">
+
+            <mat-error *ngIf="formGroup.get('qtyInStock')?.touched && formGroup.get('qtyInStock')?.invalid">
+                Quantidade é obrigatório.
+            </mat-error>
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="confirm()" [disabled]="formGroup.invalid">Confirmar</button>
+</mat-dialog-actions>
