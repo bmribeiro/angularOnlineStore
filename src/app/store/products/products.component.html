@@ -1,0 +1,9 @@
+<h1>Produtos</h1>
+
+<div class="row">
+    <div *ngFor="let product of products" class="card" class="col-md-3 mb-3" (click)="detail(product)">
+        <div class="card-body">
+            <p class="card-text">{{ product.productName }}</p>
+        </div>
+    </div>
+</div>

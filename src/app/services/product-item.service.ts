@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductItem } from '../models/ProductItem';
+import { Colour } from '../models/Colour';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,18 @@ export class ProductItemService {
 
     // Solicitação HTTP GET
     return this.http.get<any[]>(this.apiUrl, { headers: headers });
+  }
+
+  // GET
+  getProductItemsByProduct(productId: number): Observable<any[]> {
+
+    // Solicitação HTTP GET
+    return this.http.get<ProductItem[]>(`${this.apiUrl}/product/${productId}`);
+  }
+
+  // GET Colours
+  getColoursByProductId(productId: number): Observable<Colour[]> {
+    return this.http.get<Colour[]>(`${this.apiUrl}/product/${productId}/colours`);
   }
 
   // POST

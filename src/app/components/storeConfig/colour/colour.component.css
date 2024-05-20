@@ -5,3 +5,10 @@
 .nameCol {
     width: 15%;
 }
+
+
+.mat-header-cell.stickyEnd, .mat-cell.stickyEnd {
+    position: sticky;
+    right: 0;
+    background: white;
+  }

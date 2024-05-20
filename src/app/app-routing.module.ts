@@ -29,15 +29,11 @@ const routes: Routes = [
   { path: 'attributeType', component: AttributeTypeComponent },
 
   // Store
-  {
-    path: 'store', loadChildren:
-      () => import('./store/store.module').then(m => m.StoreModule)
-
-  }
+  { path: 'store', loadChildren: () => import('./store/showroom.module').then(m => m.ShowroomModule) }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

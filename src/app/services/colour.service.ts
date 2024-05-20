@@ -21,6 +21,11 @@ export class ColourService {
     return this.http.get<any[]>(this.apiUrl, { headers: headers });
   }
 
+  // Colours From Product
+  getColoursByProductId(productId: number): Observable<Colour[]> {
+    return this.http.get<Colour[]>(`${this.apiUrl}/product/${productId}/colours`);
+  }
+
   // POST
   addEl(colour: Colour): Observable<any> {
 

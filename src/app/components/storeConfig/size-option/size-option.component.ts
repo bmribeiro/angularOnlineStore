@@ -9,7 +9,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { SizeOptionService } from '../../../services/size-option.service';
 import { SizeCategoryService } from '../../../services/size-category.service';
-import { SizeCategoryDialogComponent } from '../../dialogs/size-category-dialog/size-category-dialog.component';
 import { SizeOptionDialogComponent } from '../../dialogs/size-option-dialog/size-option-dialog.component';
 
 @Component({

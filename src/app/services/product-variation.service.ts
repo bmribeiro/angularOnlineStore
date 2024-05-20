@@ -24,6 +24,11 @@ export class ProductVariationService {
     return this.http.get<any[]>(this.apiUrl, { headers: headers });
   }
 
+  // GET by ProductItem
+  getProductVariationsByProductItem(productItemId : number){
+    return this.http.get<ProductVariation>(`${this.apiUrl}/productItem/${productItemId}`);
+  }
+
   // POST
   addEl(productVariation: ProductVariation): Observable<any> {
 

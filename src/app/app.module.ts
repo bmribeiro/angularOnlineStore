@@ -38,7 +38,7 @@ import { ProductAttributeDialogComponent } from './components/dialogs/product-at
 import { MatSelectModule } from '@angular/material/select';
 import { ProductDialogComponent } from './components/dialogs/product-dialog/product-dialog.component';
 import { ProductItemDialogComponent } from './components/dialogs/product-item-dialog/product-item-dialog.component';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { CartComponent } from './components/storeCart/cart/cart.component';
 import { CartBillingComponent } from './components/storeCart/cart-billing/cart-billing.component';
 import { CartDeliveryComponent } from './components/storeCart/cart-delivery/cart-delivery.component';
@@ -47,6 +47,7 @@ import { CartShippingComponent } from './components/storeCart/cart-shipping/cart
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProductVariationDialogComponent } from './components/dialogs/product-variation-dialog/product-variation-dialog.component';
 import { SizeOptionDialogComponent } from './components/dialogs/size-option-dialog/size-option-dialog.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import { SizeOptionDialogComponent } from './components/dialogs/size-option-dial
         CartBillingComponent,
         CartDeliveryComponent,
         CartPaymentComponent,
-        CartShippingComponent
+        CartShippingComponent,
+        FooterComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true },
@@ -107,7 +109,7 @@ import { SizeOptionDialogComponent } from './components/dialogs/size-option-dial
         MatMenuModule,
         MatSelectModule,
         MatIconModule,
-        NoopAnimationsModule 
+        NoopAnimationsModule
     ],
 })
 export class AppModule { }

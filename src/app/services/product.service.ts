@@ -23,6 +23,13 @@ export class ProductService {
     return this.http.get<any[]>(this.apiUrl, { headers: headers });
   }
 
+  // GET BY CategoryId
+  getProductsByCategory(categoryId: number): Observable<any[]> {
+
+    // Solicitação HTTP GET
+    return this.http.get<any[]>(`${this.apiUrl}/category/${categoryId}`);
+  }
+
   // POST
   addEl(product: Product, file: File): Observable<any> {
 
