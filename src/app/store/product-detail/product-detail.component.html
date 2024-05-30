@@ -5,9 +5,8 @@
         <p>Imagens</p>
 
         <div class="row">
-            <div *ngFor="let productImage of productImages" class="card" class="col-md-3 mb-3">
-                <img [src]="'data:image/jpeg;base64,' + productImage.imageBytes" class="card-img-top" alt="Card image cap">
-            </div>
+            <img [src]="'data:image/jpeg;base64,' + selectedProductItem.productItemImages[0].imageBase64"
+                class="card-img-top" alt="Card image cap">
         </div>
     </div>
 
@@ -46,10 +45,13 @@
         <mat-form-field class="formFieldFullWidth">
             <mat-label>Tipo Atributo</mat-label>
             <mat-select name="attributeType">
-                <mat-option *ngFor="let productColor of productColours" [value]="productColor">
+                <!--
+                <mat-option *ngFor="let productColor of productColours" [value]="productColor" *ngIf="productColours.length > 0">
                     {{ productColor.colourName }}
                 </mat-option>
+                -->
             </mat-select>
+
         </mat-form-field>
 
     </div>

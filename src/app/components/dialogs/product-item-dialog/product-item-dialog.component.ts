@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AttributeOptionDialogComponent } from '../attribute-option-dialog/attribute-option-dialog.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductItem } from '../../../models/ProductItem';
+import { ProductItemImage } from '../../../models/ProductItemImage';
 
 @Component({
   selector: 'app-product-item-dialog',
@@ -20,11 +21,7 @@ export class ProductItemDialogComponent {
   products!: Product[];
   colours!: Colour[];
 
-  // File
-  fileName = '';
-  file: File | undefined;
-
-  // AttributeOption
+  // ProductItem
   productItemEl: ProductItem = {
     productItemId: null,
     product: null,
@@ -32,8 +29,21 @@ export class ProductItemDialogComponent {
     originalPrice: 0,
     salePrice: 0,
     productCode: '',
-    file: undefined
+    productItemImages: []
   };
+
+  // Image
+  productItemImage: ProductItemImage = {
+    productItemImageId: null,
+    productItem: null,
+    imageFilename: '',
+    imageOrder: 0,
+    isProductItemCover: false,
+    imageBase64: '',
+    file: null
+  }
+
+  productItemImages: ProductItemImage[] = [];
 
   constructor(public productItemDialogRef: MatDialogRef<AttributeOptionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -84,10 +94,34 @@ export class ProductItemDialogComponent {
   }
 
   onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    if (this.file) {
-      this.fileName = this.file.name;
-    }
+
+    // File
+    const file: File = event.target.files[0];
+
+    // Order
+    const order = this.productItemImages.length;
+
+    // Objeto productItemImage
+    const productItemImage: ProductItemImage = {
+      productItemImageId: null,
+      productItem: null,
+      imageFilename: file.name,
+      imageOrder: order,
+      isProductItemCover: false,
+      imageBase64: '',
+      file: file
+    };
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      productItemImage.imageBase64 = reader.result as string;
+    };
+    reader.onerror = (error) => {
+      console.error('Error: ', error);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    this.productItemImages.push(productItemImage);
   }
 
   confirm(): void {
@@ -99,9 +133,6 @@ export class ProductItemDialogComponent {
       const salePriceControl = this.formGroup.get('salePrice');
       const productCodeControl = this.formGroup.get('productCode');
 
-      console.log('Product: ' + productControl);
-      console.log('Colour' + colourControl);
-
       if (productControl && colourControl && 
         productControl.value && colourControl.value) {
         this.productItemEl = {
@@ -111,7 +142,7 @@ export class ProductItemDialogComponent {
           originalPrice: originalPriceControl?.value,
           salePrice: salePriceControl?.value,
           productCode: productCodeControl?.value,
-          file: this.file
+          productItemImages: this.productItemImages
         };
         this.productItemDialogRef.close({
           element: this.productItemEl

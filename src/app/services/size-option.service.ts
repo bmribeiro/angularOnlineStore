@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SizeCategory } from '../models/SizeCategory';
 import { SizeOption } from '../models/SizeOption';
 import fileSaver from 'file-saver';
+import { json } from 'stream/consumers';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,8 @@ export class SizeOptionService {
 
   // POST
   addEl(sizeOption: SizeOption): Observable<any> {
+
+    console.log('Serviço' + JSON.stringify(sizeOption));
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

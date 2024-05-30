@@ -32,6 +32,9 @@ export class ProductsComponent {
   
   async loadProducts() {
     if (this.selectedCategoryId !== null) {
+
+      console.log(this.selectedCategoryId);
+
       const data = await this.productService.getProductsByCategory(this.selectedCategoryId).pipe(take(1)).toPromise();
       this.products = data as Product[];
     }

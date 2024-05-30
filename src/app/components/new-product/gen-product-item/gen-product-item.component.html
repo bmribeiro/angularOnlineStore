@@ -1,0 +1,42 @@
+<p>Inserir Item</p>
+
+<div *ngIf="showGenProductItem">
+
+    <form [formGroup]="formGroup">
+
+        <!-- Preço -->
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="originalPrice" name="originalPrice">
+        </mat-form-field>
+
+        <!-- Promo -->
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="promoPrice" name="promoPrice">
+        </mat-form-field>
+
+        <!-- Codígo Protuto -->
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="productCode" name="productCode">
+        </mat-form-field>
+
+        <!-- Botão de envio -->
+        <button mat-raised-button color="primary" (click)="createItem()" [disabled]="!formGroup.valid">Guardar</button>
+
+    </form>
+
+</div>
+
+<div *ngIf="productItems.length > 0">
+
+    <hr>
+
+    <h1>Items</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <app-gen-product-item-detail *ngFor="let productItem of productItems"
+            [productItemDetail]="productItem"></app-gen-product-item-detail>
+    </div>
+</div>

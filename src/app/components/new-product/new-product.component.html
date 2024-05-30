@@ -1,0 +1,6 @@
+
+<app-gen-product-category (productCategorySelectedEmitter)="onProductCategorySelected($event)"></app-gen-product-category>
+
+<app-gen-product *ngIf="showGenProduct" [showGenProduct]="showGenProduct" (productSelectedEmitter)="onProductSelected($event)"></app-gen-product>
+
+<app-gen-product-item *ngIf="showGenProductItem" [showGenProductItem]="showGenProduct"></app-gen-product-item>

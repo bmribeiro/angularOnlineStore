@@ -12,6 +12,7 @@ import { AttributeOptionComponent } from './components/storeConfig/attribute-opt
 import { AttributeTypeComponent } from './components/storeConfig/attribute-type/attribute-type.component';
 import { SizeOptionComponent } from './components/storeConfig/size-option/size-option.component';
 import { ProductAttributeComponent } from './components/storeConfig/product-attribute/product-attribute.component';
+import { NewProductComponent } from './components/new-product/new-product.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/brands', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'productAttribute', component: ProductAttributeComponent },
   { path: 'attributeOption', component: AttributeOptionComponent },
   { path: 'attributeType', component: AttributeTypeComponent },
+  { path: 'newProduct', component: NewProductComponent },
 
   // Store
   { path: 'store', loadChildren: () => import('./store/showroom.module').then(m => m.ShowroomModule) }

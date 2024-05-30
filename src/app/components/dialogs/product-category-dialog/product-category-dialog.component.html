@@ -15,17 +15,29 @@
             </mat-error>
         </mat-form-field>
 
-        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
+        <br>
+        <h4>Imagens</h4>
+        <div *ngFor="let image of categoryImages; let i = index">
+            <div *ngIf="image" class="card">
+                <img [src]="image.imageBase64" style="width: 10%;" class="card-img-top">
+            </div>
+        </div>
 
+        <br>
+        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
+        
         <div class="file-upload">
 
+            <!--
             {{fileName || "No file uploaded yet."}}
+            -->
 
             <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
                 <mat-icon>attach_file</mat-icon>
             </button>
         </div>
 
+        <br>
         <mat-form-field class="formFieldFullWidth">
             <mat-label>Descrição</mat-label>
             <textarea matInput formControlName="categoryDescription" name="categoryDescription"></textarea>
@@ -40,8 +52,7 @@
         </mat-form-field>
         <mat-form-field class="formFieldFullWidth">
             <mat-label>Categoria Pai</mat-label>
-            <mat-select formControlName="parentProductCategory" name="parentProductCategory"
-                [compareWith]="compareProductCategoryFunction">
+            <mat-select formControlName="parentProductCategory" name="parentProductCategory" [compareWith]="compareProductCategoryFunction">
                 <mat-option *ngFor="let parentCategory of parentCategories" [value]="parentCategory">
                     {{ parentCategory.categoryName }}
                 </mat-option>

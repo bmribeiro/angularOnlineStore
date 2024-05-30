@@ -86,25 +86,22 @@ export class ProductComponent {
 
       if (result && result.element) {
 
-        // File
-        const file = result.element.file;
-
         // New Product
         if (result.element.productId == null) {
-          this.productService.addEl(result.element, file).subscribe(response => {
-            this.productCategories.push(result.element);
-            console.log('Categoria adicionada com sucesso:', response);
+          this.productService.addEl(result.element).subscribe(response => {
+            this.products.push(result.element);
+            console.log('Produto adicionado com sucesso:', response);
           }, error => {
-            console.error('Erro ao adicionar Categoria:', error);
+            console.error('Erro ao adicionar Produto:', error);
           });
 
           // Edit Product
         } else {
-          this.productService.updateEl(result.element, file).subscribe(response => {
-            this.productCategories.push(result.element);
-            console.log('Categoria atualizado com sucesso:', response);
+          this.productService.updateEl(result.element).subscribe(response => {
+            this.products.push(result.element);
+            console.log('Produto atualizado com sucesso:', response);
           }, error => {
-            console.error('Erro ao atualizar Categoria:', error);
+            console.error('Erro ao atualizar Produto:', error);
           });
         }
       }
@@ -123,7 +120,9 @@ export class ProductComponent {
           response.productName,
           response.productDescription,
           response.careInstructions,
-          response.about);
+          response.about,
+          response.productImages
+        );
         this.openDialog(product);
       });
     } else {

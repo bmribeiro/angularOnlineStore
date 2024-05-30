@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, matDialogAnimations } from '@angular/mat
 import { ProductCategory } from '../../../models/ProductCategory';
 import { SizeCategory } from '../../../models/SizeCategory';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CategoryImage } from '../../../models/CategoryImage';
 
 @Component({
   selector: 'app-product-category-dialog',
@@ -19,21 +20,27 @@ export class ProductCategoryDialogComponent {
   sizes: SizeCategory[];
   parentCategories: ProductCategory[];
 
-  // ProductCategory
+  // Category
   productCategoryEl: ProductCategory = {
     productCategoryId: null,
     categoryName: '',
-    categoryImage: '',
-    imageBytes: '',
     categoryDescription: '',
     sizeCategory: null,
     parentProductCategory: null,
-    file: undefined
+    categoryImages: []
   };
 
-  // File
-  fileName = '';
-  file: File | undefined;
+  // Image
+  categoryImage: CategoryImage = {
+    categoryImageId: null,
+    productCategory: null,
+    imageFilename: '',
+    imageOrder: 0,
+    isAlbumCover: false,
+    imageBase64: ''
+  }
+
+  categoryImages: CategoryImage[] = [];
 
   constructor(public productCategoryDialogRef: MatDialogRef<ProductCategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -48,7 +55,6 @@ export class ProductCategoryDialogComponent {
       this.formGroup = new FormGroup({
         productCategoryId: new FormControl(data.productCategory.productCategoryId),
         categoryName: new FormControl(data.productCategory.categoryName, Validators.required),
-        categoryImage: new FormControl(data.productCategory.categoryImage),
         categoryDescription: new FormControl(data.productCategory.categoryDescription, Validators.required),
         sizeCategory: new FormControl(data.productCategory.sizeCategory),
         parentProductCategory: new FormControl(data.productCategory.parentProductCategory)
@@ -56,10 +62,10 @@ export class ProductCategoryDialogComponent {
 
       // New ProductCategory
     } else {
+
       this.formGroup = new FormGroup({
         productCategoryId: new FormControl(null),
         categoryName: new FormControl('', Validators.required),
-        categoryImage: new FormControl(''),
         categoryDescription: new FormControl('', Validators.required),
         sizeCategory: new FormControl(null),
         parentProductCategory: new FormControl(null)
@@ -86,15 +92,39 @@ export class ProductCategoryDialogComponent {
   }
 
   onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    this.fileName = this.file ? this.file.name : 'No file uploaded yet.';
+
+    // File
+    const file: File = event.target.files[0];
+
+    // Order
+    const order = this.categoryImages.length;
+
+    // Objeto CategoryImage
+    const categoryImage: CategoryImage = {
+      categoryImageId: null,
+      productCategory: null,
+      imageFilename: file.name,
+      imageOrder: order,
+      isAlbumCover: false,
+      imageBase64: ''
+    };
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      categoryImage.imageBase64 = reader.result as string;
+    };
+    reader.onerror = (error) => {
+      console.error('Error: ', error);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    this.categoryImages.push(categoryImage);
   }
 
   confirm(): void {
     if (this.formGroup.valid) {
       const productCategoryIdControl = this.formGroup.get('productCategoryId');
       const categoryNameControl = this.formGroup.get('categoryName');
-      const categoryImageControl = this.formGroup.get('categoryImage');
       const categoryDescriptionControl = this.formGroup.get('categoryDescription');
       const sizeCategoryControl = this.formGroup.get('sizeCategory');
       const parentProductCategoryControl = this.formGroup.get('parentProductCategory');
@@ -105,13 +135,13 @@ export class ProductCategoryDialogComponent {
         this.productCategoryEl = {
           productCategoryId: productCategoryIdControl ? productCategoryIdControl.value : null,
           categoryName: categoryNameControl.value,
-          categoryImage: categoryImageControl ? categoryImageControl.value : null,
-          imageBytes: '',
           categoryDescription: categoryDescriptionControl.value,
           sizeCategory: sizeCategoryControl ? sizeCategoryControl.value : null,
           parentProductCategory: parentProductCategoryControl ? parentProductCategoryControl.value : null,
-          file: this.file
+          categoryImages: this.categoryImages
         };
+        
+        console.log('Dialog: ' + JSON.stringify(this.productCategoryEl));
         this.productCategoryDialogRef.close({
           element: this.productCategoryEl
         });

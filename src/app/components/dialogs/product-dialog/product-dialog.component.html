@@ -23,6 +23,30 @@
             </mat-select>
         </mat-form-field>
 
+        <br>
+        <h4>Imagens</h4>
+        <div *ngFor="let image of productImages; let i = index">
+            <div *ngIf="image" class="card">
+                <img [src]="image.imageBase64" style="width: 10%;" class="card-img-top">
+            </div>
+        </div>
+
+        <br>
+        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
+        
+        <div class="file-upload">
+
+            <!--
+            {{fileName || "No file uploaded yet."}}
+            -->
+
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
+
+        <br>
+
         <!-- Nome -->
         <mat-form-field class="formFieldFullWidth">
             <mat-label>Nome</mat-label>
@@ -34,18 +58,6 @@
             <mat-label>Descrição</mat-label>
             <input matInput formControlName="productDescription" name="productDescription">
         </mat-form-field>
-
-        <!-- Imagem -->
-        <input type="file" class="fileInput" (change)="onFileSelected($event)" #fileUpload>
-
-        <div class="file-upload">
-
-            {{fileName || "No file uploaded yet."}}
-
-            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
-                <mat-icon>attach_file</mat-icon>
-            </button>
-        </div>
 
         <!-- Instruções -->
         <mat-form-field class="formFieldFullWidth">

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Variação</h2>
+
+<mat-dialog-content>
+
+    <form [formGroup]="formGroup">
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Tamanho</mat-label>
+            <mat-select formControlName="size" name="size">
+                <mat-option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">
+                    {{ sizeOption.sizeName }}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="formGroup.get('size')?.touched && formGroup.get('size')?.invalid">
+                Tamanho é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Quantidade</mat-label>
+            <input matInput formControlName="qtyInStock" name="qtyInStock">
+            <mat-error *ngIf="formGroup.get('qtyInStock')?.touched && formGroup.get('qtyInStock')?.invalid">
+                Nome é obrigatório.
+            </mat-error>
+        </mat-form-field>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancelDialog()">Cancelar</button>
+    <button mat-button (click)="submitDialog()" [disabled]="formGroup.invalid">Confirmar</button>
+</mat-dialog-actions>

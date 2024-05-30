@@ -1,17 +1,23 @@
-import { ProductItem } from "./ProductItem";
+import { Product } from "./Product";
 
 export interface ProductImage {
   productImageId: number | null;
-  productItem: ProductItem;
-  imageFile: string;
-  imageBytes: string;
+  product: Product | null;
+  imageFilename: string;
+  imageOrder: number;
+  isProductCover: boolean,
+  imageBase64: string,
+  file : File | null
 }
 
 export class ProductImageImpl implements ProductImage {
   constructor(
     public productImageId: number | null,
-    public productItem: ProductItem,
-    public imageFile: string,
-    public imageBytes: string
+    public product: Product | null,
+    public imageFilename: string,
+    public imageOrder: number,
+    public isProductCover: boolean,
+    public imageBase64: string,
+    public file: File | null
   ) { }
 }

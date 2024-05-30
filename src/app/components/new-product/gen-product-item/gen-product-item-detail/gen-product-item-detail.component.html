@@ -1,0 +1,20 @@
+<div class="col">
+  <div class="card" class="col-md-3 mb-3">
+    <div class="card-body">
+      <p class="card-text">Nome: {{ productItemDetail?.productCode }}</p>
+      <p class="card-text">Descrição: {{ productItemDetail?.productCode }}</p>
+      <p class="card-text">Código: {{ productItemDetail?.productCode }}</p>
+    </div>
+  </div>
+
+  <div *ngFor="let image of base64Images; let i = index">
+    <div *ngIf="image">
+      <img [src]="image" alt="Selected Image {{i + 1}}" style="width: 15%;" class="card-img-top">
+    </div>
+  </div>
+
+  <br>
+  <button mat-raised-button color="primary" (click)="openImageDialog()">Adicionar Imagem</button>
+
+  <app-gen-product-item-variation></app-gen-product-item-variation>
+</div>

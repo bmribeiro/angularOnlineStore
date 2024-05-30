@@ -2,7 +2,7 @@
 
 <div class="row">
     <div *ngFor="let category of childCategories" class="card" class="col-md-3 mb-3" (click)="onChild(category)">
-        <img [src]="'data:image/jpeg;base64,' + category.imageBytes" class="card-img-top" alt="Card image cap">
+        <img [src]="'data:image/jpeg;base64,' + category.categoryImages[0].imageBase64" class="card-img-top" alt="Card image cap">
         <div class="card-body">
             <p class="card-text">{{ category.categoryName }}</p>
         </div>

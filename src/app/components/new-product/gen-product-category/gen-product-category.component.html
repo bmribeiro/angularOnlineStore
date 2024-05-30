@@ -1,0 +1,26 @@
+<h1>Categoria</h1>
+
+<mat-radio-group aria-label="Selecione uma Opção" (change)="onOptionChange($event)">
+    <mat-radio-button value="select">Selecionar Categoria</mat-radio-button>
+    <mat-radio-button value="new">Criar Categoria</mat-radio-button>
+</mat-radio-group>
+
+
+
+<div *ngIf="selectedOption === 'select'">
+    <mat-form-field class="formFieldFullWidth">
+        <mat-label>Categorias</mat-label>
+        <mat-select name="attributeType" (selectionChange)="onProductCategorySelected($event.value)">
+            <mat-option *ngFor="let productCategory of productCategories" [value]="productCategory">
+                {{ productCategory.categoryName }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+</div>
+
+<div *ngIf="selectedOption === 'new'">
+
+    <button mat-raised-button color="primary" (click)="newCategory()"></button>
+
+</div>

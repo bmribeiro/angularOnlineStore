@@ -5,10 +5,10 @@ import { ProductItem } from '../../models/ProductItem';
 import { take } from 'rxjs';
 import { ProductVariation } from '../../models/ProductVariation';
 import { ProductVariationService } from '../../services/product-variation.service';
-import { ProductImageService } from '../../services/product-image.service';
-import { ProductImage } from '../../models/ProductImage';
 import { Colour } from '../../models/Colour';
 import { ColourService } from '../../services/colour.service';
+import { ProductImage } from '../../models/ProductImage';
+import { ProductItemImageService } from '../../services/product-item-image.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,7 +29,7 @@ export class ProductDetailComponent {
   constructor(
     private route: ActivatedRoute,
     private productItemService: ProductItemService,
-    private productImageService: ProductImageService,
+    private productItemImageService: ProductItemImageService,
     private productVariationService: ProductVariationService,
     private colourService : ColourService
   ) { }
@@ -57,7 +57,7 @@ export class ProductDetailComponent {
         // Verifica se há itens do produto
         if (this.productItem && this.productItem.length > 0) {
           this.selectedProductItem = this.productItem[0];
-          console.log('ProductItem Selected: ' + this.selectedProductItem);
+          console.log('ProductItem Selected: ' + JSON.stringify(this.selectedProductItem));
         }
       } catch (error) {
         console.error('Error loading product details:', error);
@@ -71,7 +71,7 @@ export class ProductDetailComponent {
     if (this.selectedProductItem && this.selectedProductItem.productItemId !== null) {
       try {
         // Imagens
-        const dataProductImage = await this.productImageService.getProductImagesByProductItem(this.selectedProductItem.productItemId).pipe(take(1)).toPromise();
+        const dataProductImage = await this.productItemImageService.getProductImagesByProductItem(this.selectedProductItem.productItemId).pipe(take(1)).toPromise();
         this.productImages = dataProductImage as unknown as ProductImage[];
 
         // Variações

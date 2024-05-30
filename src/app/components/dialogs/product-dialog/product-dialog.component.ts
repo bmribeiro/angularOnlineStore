@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Brand } from '../../../models/Brand';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Product } from '../../../models/Product';
+import { ProductImage } from '../../../models/ProductImage';
 
 @Component({
   selector: 'app-product-dialog',
@@ -19,7 +20,7 @@ export class ProductDialogComponent {
   productCategories!: ProductCategory[];
   brands!: Brand[];
 
-  // ProductCategory
+  // Product
   productEl: Product = {
     productId: null,
     productCategory: null,
@@ -28,25 +29,30 @@ export class ProductDialogComponent {
     productDescription: '',
     careInstructions: '',
     about: '',
-    file: undefined
+    productImages: []
   };
 
-  // File
-  fileName = '';
-  file: File | undefined;
+  // Image
+  productImage: ProductImage = {
+    productImageId: null,
+    product: null,
+    imageFilename: '',
+    imageOrder: 0,
+    isProductCover: false,
+    imageBase64: '',
+    file: null
+  }
+
+  productImages: ProductImage[] = [];
 
   constructor(public productDialogRef: MatDialogRef<ProductDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
-    console.log('Product' + data.product.productId)
-
     this.productCategories = data.dataProductCategories;
     this.brands = data.dataBrands;
 
     if (data.product != null) {
-
-      console.log('Editar');
 
       // Edit ProductCategory
       this.formGroup = new FormGroup({
@@ -92,10 +98,34 @@ export class ProductDialogComponent {
   }
 
   onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    if (this.file) {
-      this.fileName = this.file.name;
-    }
+
+    // File
+    const file: File = event.target.files[0];
+
+    // Order
+    const order = this.productImages.length;
+
+    // Objeto CategoryImage
+    const productImage: ProductImage = {
+      productImageId: null,
+      product: null,
+      imageFilename: file.name,
+      imageOrder: order,
+      isProductCover: false,
+      imageBase64: '',
+      file: file
+    };
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      productImage.imageBase64 = reader.result as string;
+    };
+    reader.onerror = (error) => {
+      console.error('Error: ', error);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    this.productImages.push(productImage);
   }
 
   confirm(): void {
@@ -117,10 +147,11 @@ export class ProductDialogComponent {
           brand: brandControl ? brandControl.value : null,
           productName: productNameControl?.value,
           productDescription: productDescriptionControl?.value,
-          careInstructions: careInstructionsControl ? careInstructionsControl.value : null,
-          about: aboutControl ? aboutControl.value : null,
-          file: this.file
+          careInstructions: careInstructionsControl ? careInstructionsControl.value : '',
+          about: aboutControl ? aboutControl.value : '',
+          productImages: this.productImages
         };
+
         this.productDialogRef.close({
           element: this.productEl
         });

@@ -1,0 +1,5 @@
+<div *ngFor="let genProductVariation of genProductVariations">
+    <p>{{ genProductVariation.size.sizeName }} - {{ genProductVariation.qtyInStock }}</p>
+</div>
+
+<button mat-raised-button color=" primary" (click)="openVariationDialog()">Adicionar Variação</button>

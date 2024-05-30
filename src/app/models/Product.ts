@@ -1,5 +1,6 @@
 import { Brand } from "./Brand";
 import { ProductCategory } from "./ProductCategory";
+import { ProductImage } from "./ProductImage";
 
 export interface Product {
   productId: number | null;
@@ -9,7 +10,7 @@ export interface Product {
   productDescription: string;
   careInstructions: string;
   about: string;
-  file?: File
+  productImages: ProductImage[];
 }
 
 export class ProductImpl implements Product {
@@ -21,6 +22,6 @@ export class ProductImpl implements Product {
     public productDescription: string,
     public careInstructions: string,
     public about: string,
-    public file?: File
+    public productImages: ProductImage[]
   ) { }
 }

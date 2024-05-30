@@ -48,6 +48,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProductVariationDialogComponent } from './components/dialogs/product-variation-dialog/product-variation-dialog.component';
 import { SizeOptionDialogComponent } from './components/dialogs/size-option-dialog/size-option-dialog.component';
 import { FooterComponent } from './footer/footer.component';
+import { NewProductComponent } from './components/new-product/new-product.component';
+import { GenProductCategoryComponent } from './components/new-product/gen-product-category/gen-product-category.component';
+import { GenProductComponent } from './components/new-product/gen-product/gen-product.component';
+import { GenProductItemComponent } from './components/new-product/gen-product-item/gen-product-item.component';
+import { GenProductItemDetailComponent } from './components/new-product/gen-product-item/gen-product-item-detail/gen-product-item-detail.component';
+import { GenImageDialogComponent } from './components/new-product/gen-product-item/gen-image-dialog/gen-image-dialog.component';
+import { GenProductItemVariationComponent } from './components/new-product/gen-product-item/gen-product-item-variation/gen-product-item-variation.component';
+import { GenVariationDialogComponent } from './components/new-product/gen-product-item/gen-variation-dialog/gen-variation-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [
@@ -81,7 +90,15 @@ import { FooterComponent } from './footer/footer.component';
         CartDeliveryComponent,
         CartPaymentComponent,
         CartShippingComponent,
-        FooterComponent
+        FooterComponent,
+        NewProductComponent,
+        GenProductCategoryComponent,
+        GenProductComponent,
+        GenProductItemComponent,
+        GenProductItemDetailComponent,
+        GenImageDialogComponent,
+        GenProductItemVariationComponent,
+        GenVariationDialogComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true },
@@ -109,6 +126,7 @@ import { FooterComponent } from './footer/footer.component';
         MatMenuModule,
         MatSelectModule,
         MatIconModule,
+        MatRadioModule,
         NoopAnimationsModule
     ],
 })

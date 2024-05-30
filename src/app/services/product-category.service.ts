@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ProductCategory } from '../models/ProductCategory';
 import fileSaver from 'file-saver';
+import { CategoryImage } from '../models/CategoryImage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,10 @@ export class ProductCategoryService {
 
   private apiUrl = 'http://localhost:8080/api/product-categories';
 
-
   constructor(private http: HttpClient) { }
 
   // GET
-  getProductCategories(criteria?: any): Observable<any[]> {
+  getProductCategories(criteria?: any): Observable<ProductCategory[]> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -28,38 +28,27 @@ export class ProductCategoryService {
       });
     }
 
-    return this.http.get<any[]>(this.apiUrl, { headers, params }).pipe(
-      map((response: any[]) => {
+    return this.http.get<ProductCategory[]>(this.apiUrl, { headers, params }).pipe(
+      map((response: ProductCategory[]) => {
         return response.map(category => {
           return {
             productCategoryId: category.productCategoryId,
             categoryName: category.categoryName,
-            categoryImage: category.categoryImage,
-            imageBytes: category.imageBytes,
             categoryDescription: category.categoryDescription,
             sizeCategory: category.sizeCategory,
-            parentProductCategory: category.parentProductCategory
-          };
+            parentProductCategory: category.parentProductCategory,
+            categoryImages: category.categoryImages
+          } as ProductCategory;
         });
       })
     );
   }
 
   // POST
-  addEl(productCategory: ProductCategory, file: File): Observable<any> {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data'
-    });
-
-    const formData: FormData = new FormData();
-    if(file != undefined){
-      formData.append('file', file);
-    }
-    formData.append('productCategory', JSON.stringify(productCategory));
+  addEl(productCategory: ProductCategory): Observable<any> {
 
     // Solicitação HTTP POST
-    return this.http.post<any>(this.apiUrl, formData, {});
+    return this.http.post<ProductCategory>(this.apiUrl, productCategory, {});
   }
 
   // GET BY ID
@@ -68,15 +57,10 @@ export class ProductCategoryService {
   }
 
   // UPDATE
-  updateEl(productCategory: ProductCategory, file: File) {
+  updateEl(productCategory: ProductCategory) {
 
-    const formData: FormData = new FormData();
-    if(file != undefined){
-      formData.append('file', file);
-    }
-    formData.append('productCategory', JSON.stringify(productCategory));
-
-    return this.http.put<ProductCategory>(this.apiUrl, formData, { });
+    // Solicitação HTTP POST
+    return this.http.put<ProductCategory>(this.apiUrl, JSON.stringify(productCategory), {});
   }
 
   // DELETE

@@ -18,7 +18,7 @@ import { SizeCategoryService } from '../../../services/size-category.service';
 })
 export class ProductCategoryComponent {
 
-  displayedColumns: string[] = ['categoryName', 'categoryImage', 'categoryDescription', 'sizeCategory', 'parentProductCategory', 'edit', 'delete'];
+  displayedColumns: string[] = ['categoryName', 'categoryDescription', 'sizeCategory', 'parentProductCategory', 'edit', 'delete'];
   productCategories: ProductCategory[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -84,13 +84,9 @@ export class ProductCategoryComponent {
     productCategoryDialogRef.afterClosed().subscribe(result => {
       if (result && result.element) { 
 
-        // File
-        const file = result.element.file;
-        console.log(file);
-
         // New ProductCategory
         if (result.element.productCategoryId == null) {
-          this.productCategoryService.addEl(result.element, file).subscribe(response => {
+          this.productCategoryService.addEl(result.element).subscribe(response => {
             this.productCategories.push(result.element);
             console.log('Categoria adicionada com sucesso:', response);
           }, error => {
@@ -99,7 +95,7 @@ export class ProductCategoryComponent {
 
           // Edit ProductCategory
         } else {
-          this.productCategoryService.updateEl(result.element, file).subscribe(response => {
+          this.productCategoryService.updateEl(result.element).subscribe(response => {
             this.productCategories.push(result.element);
             console.log('Categoria atualizado com sucesso:', response);
           }, error => {
@@ -118,11 +114,10 @@ export class ProductCategoryComponent {
         const productCategory: ProductCategory = new ProductCategoryImpl(
           response.productCategoryId,
           response.categoryName,
-          response.categoryImage,
-          response.imageBytes,
           response.categoryDescription,
           response.sizeCategory,
-          response.parentProductCategory
+          response.parentProductCategory,
+          response.categoryImages
         );
         this.openDialog(productCategory);
       });

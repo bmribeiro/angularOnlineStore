@@ -90,7 +90,7 @@ export class ProductItemComponent {
 
         // New ProductItem
         if (result.element.productItemId == null) {
-          this.productItemService.addEl(result.element, file).subscribe(response => {
+          this.productItemService.addEl(result.element).subscribe(response => {
             this.productItems.push(result.element);
             console.log('Item adicionado com sucesso:', response);
           }, error => {
@@ -102,7 +102,7 @@ export class ProductItemComponent {
 
           console.log('Editar');
 
-          this.productItemService.updateEl(result.element, file).subscribe(response => {
+          this.productItemService.updateEl(result.element).subscribe(response => {
             this.productItems.push(result.element);
             console.log('Item atualizado com sucesso:', response);
           }, error => {
@@ -124,7 +124,8 @@ export class ProductItemComponent {
           response.colour,
           response.originalPrice,
           response.salePrice,
-          response.productCode
+          response.productCode,
+          response.productItemImages
         );
         this.openDialog(productItem);
       });

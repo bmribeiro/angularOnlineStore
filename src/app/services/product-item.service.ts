@@ -36,18 +36,10 @@ export class ProductItemService {
   }
 
   // POST
-  addEl(productItem: ProductItem, file: File): Observable<any> {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const formData: FormData = new FormData();
-    formData.append('file', file);
-    formData.append('productItem', JSON.stringify(productItem));
-
+  addEl(productItem: ProductItem): Observable<ProductItem> {
+    
     // Solicitação HTTP POST
-    return this.http.post<any>(this.apiUrl, formData, {});
+    return this.http.post<ProductItem>(this.apiUrl, productItem, {});
   }
 
   // GET BY ID
@@ -56,15 +48,9 @@ export class ProductItemService {
   }
 
   // UPDATE
-  updateEl(productItem: ProductItem, file: File) {
+  updateEl(productItem: ProductItem) {
 
-    const formData: FormData = new FormData();
-    if (file != undefined) {
-      formData.append('file', file);
-    }
-    formData.append('productItem', JSON.stringify(productItem));
-
-    return this.http.put<ProductItem>(this.apiUrl, formData, {});
+    return this.http.put<ProductItem>(this.apiUrl, productItem, {});
   }
 
   // DELETE

@@ -1,5 +1,6 @@
 import { Colour } from "./Colour";
 import { Product } from "./Product";
+import { ProductItemImage } from "./ProductItemImage";
 
 export interface ProductItem {
     productItemId: number | null;
@@ -8,7 +9,7 @@ export interface ProductItem {
     originalPrice: number;
     salePrice: number;
     productCode: string;
-    file?: File
+    productItemImages: ProductItemImage[];
 }
 
 export class ProductItemImpl implements ProductItem {
@@ -19,7 +20,7 @@ export class ProductItemImpl implements ProductItem {
         public originalPrice: number,
         public salePrice: number,
         public productCode: string,
-        public file?: File
+        public productItemImages: ProductItemImage[]
     ) { }
 
 }

@@ -1,0 +1,25 @@
+<p>Inserir Produto</p>
+
+<div *ngIf="showGenProduct">
+
+    <form [formGroup]="formGroup">
+
+        <!-- Nome -->
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="productName" name="productName">
+        </mat-form-field>
+
+        <!-- Descrição -->
+        <mat-form-field class="formFieldFullWidth">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="productDescription" name="productDescription">
+        </mat-form-field>
+
+        <!-- Botão de envio -->
+        <button mat-raised-button color="primary" (click)="printFormGroup()"
+            [disabled]="!formGroup.valid">Guardar</button>
+
+    </form>
+
+</div>
